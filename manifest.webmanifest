@@ -1,12 +1,14 @@
 {
   "id": "cooperata-simuladores",
-  "name": "Linhas de Crédito Cooperata",
+  "name": "Cooperata  Simuladores",
   "short_name": "Cooperata",
   "start_url": "./?source=pwa",
   "scope": ".",
-  "display": "standalone",
+  "display": "fullscreen",
+  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
+  "orientation": "portrait",
+  "theme_color": "#0b1720",
   "background_color": "#0b1720",
-  "theme_color": "#3bd17f",
   "icons": [
     {
       "src": "./icons/icon-192.png",
