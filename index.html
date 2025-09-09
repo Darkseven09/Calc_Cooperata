@@ -62,6 +62,36 @@
     }
   </style>
 
+  <!-- ============================
+       Grade do menu — padronização de cards
+       ============================ -->
+  <style>
+    /* Mesma altura e largura por linha; cards preenchem a célula */
+    .menu-grid { align-items: stretch; justify-items: stretch; }
+    .menu-grid > * { height: 100%; }
+    .menu-grid .card { display: flex; align-items: center; gap: 16px; height: 100%; min-height: 72px; }
+
+    /* Ícone com dimensões fixas e centrado (evita puxar o layout) */
+    .menu-grid .icobg { width: 56px; height: 56px; flex: 0 0 56px; display:flex; align-items:center; justify-content:center; }
+    .menu-grid .ico { font-size: 30px; line-height: 1; }
+
+    /* Bloco de texto elástico */
+    .menu-grid .title, .menu-grid .desc { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .menu-grid .title { font-weight: 800; }
+
+    /* Ajuste de breakpoint: 2 colunas a partir de 768px, 1 coluna abaixo */
+    @media (max-width: 767px) {
+      .menu-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 12px; }
+    }
+    @media (min-width: 768px) {
+      .menu-grid { grid-template-columns: repeat(2, minmax(320px, 1fr)); gap: 24px; padding: 0 16px; }
+    }
+
+    /* Foco acessível (sem alterar paleta) */
+    .menu-grid .card:focus-visible,
+    .menu-grid .card:focus-within { outline: 2px solid #3bd17f; outline-offset: 2px; }
+  </style>
+
   <!-- Fix de vh: usa innerHeight real em qualquer modo -->
   <script>
     (function fixViewportVH(){
