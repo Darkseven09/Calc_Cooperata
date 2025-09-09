@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Linhas de Crédito Cooperata.</title>
 
-<link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#3bd17f">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#0b1720" 
+><link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="iconsapple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cooperata">
@@ -31,6 +31,14 @@
   .about h3{margin:0 0 4px} .about h4{margin:0 0 6px;color:#cfe1ec} .about p{margin:0;color:#cfe1ec;font-size:13px;line-height:1.5}
 </style>
 </head>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('.service-worker.js', { scope: '.' })
+        .catch(console.error);
+    });
+  }
+<script>
 <body>
   <header><h1>Linhas de Crédito Cooperata.</h1><p class="sub">Escolha a linha para abrir o simulador correspondente.</p></header>
 
