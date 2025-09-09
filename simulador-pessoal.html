@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simulador — Crédito Pessoal | Cooperata</title>
+<style>
+  :root{ --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f; --danger:#ff6b6b; --warn:#ffd166; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}
+  header{padding:28px 18px 8px;text-align:center}
+  header h1{margin:4px 0 6px;font-size:clamp(20px,3.5vw,28px)}
+  header p{margin:0;color:var(--muted)}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 16px 60px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:960px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid #173244;border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .card h2{margin:0 0 10px;font-size:18px}
+  fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  fieldset .full{grid-column:1/-1}
+  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+  input,select{width:100%;padding:12px;border:1px solid #234458;background:#0a1a24;color:var(--ink);border-radius:10px;font-size:15px;outline:none}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .results .row{align-items:baseline}
+  .note{font-size:12px;color:var(--muted)}
+  .btn{appearance:none;border:0;background:var(--accent);color:#052213;padding:12px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+  .btn.secondary{background:#0a1a24;color:var(--ink);border:1px solid #214155}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+  th,td{border-bottom:1px solid #163448;padding:10px 8px;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  tfoot td{font-weight:700}
+  .hr{height:1px;background:#173244;margin:16px 0}
+  .banner{background:#2b0f12;border:1px solid #6e2a33;color:#ffc9c9;padding:10px;border-radius:10px;margin:6px 0;display:none}
+  .ok{background:#0f2b18;border:1px solid #2a6b46;color:#b9f3d3}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Linha de Crédito — <b>Pessoal</b></h1>
+    <p>Finalidade: empréstimo para qualquer finalidade. Se houver saldo devedor atual, avaliar a linha de <b>Refinanciamento</b>.<br>
+       Até <b>1,99% a.m.</b> • Em até <b>24x</b> • Sistema <b>PRICE</b></p>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <!-- FORM -->
+      <section class="card">
+        <h2>Dados para Simulação</h2>
+        <fieldset>
+          <div>
+            <label>Salário mensal (R$)</label>
+            <input type="text" class="money" id="salario" inputmode="decimal" placeholder="ex: 3.000,00">
+          </div>
+          <div>
+            <label>Tempo como associado (meses)</label>
+            <input type="number" id="meses" min="0" step="1" placeholder="ex: 18">
+          </div>
+
+          <div>
+            <label>Saldo de capital (R$)</label>
+            <input type="text" class="money" id="saldoCapital" inputmode="decimal" value="0,00">
+          </div>
+          <div>
+            <label>Saldo devedor de outros empréstimos (R$)</label>
+            <input type="text" class="money" id="dividas" inputmode="decimal" value="0,00">
+          </div>
+
+          <div class="full">
+            <label>Valor que deseja solicitar (R$)</label>
+            <input type="text" class="money" id="valor" inputmode="decimal" placeholder="ex: 10.000,00">
+          </div>
+
+          <div>
+            <label>Prazo (meses) — máx. conforme regra</label>
+            <select id="prazo"></select>
+          </div>
+          <div>
+            <label>Taxa de juros (a.m.) — até 1,99%</label>
+            <input type="text" id="taxa" value="1,99% a.m." disabled>
+          </div>
+
+          <div class="full row" style="margin-top:8px">
+            <button class="btn secondary" id="csv" type="button" disabled>Baixar CSV</button>
+          </div>
+
+          <div class="full note">
+            <b>Regras por tempo de associação:</b><br>
+            ≤6m: <b>0,5 salário + saldo</b> (até 5x) •
+            ≤12m: <b>0,7 salário + saldo</b> (até 7x) •
+            ≤18m: <b>1,0 salário + saldo</b> (até 10x) •
+            ≤24m: <b>1,5 salários + saldo</b> (até 15x) •
+            ≥25m: <b>1,5 salários + saldo</b> (até 24x). Abate dívidas em andamento. Crédito sujeito à aprovação.<br>
+            <b>Avalista:</b> valores acima do saldo de capital sujeitos à análise.
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- RESULT -->
+      <section class="card results" id="resultCard" style="display:none">
+        <h2>Resultado da Simulação</h2>
+        <div id="banner" class="banner"></div>
+        <div class="row" style="gap:12px;flex-wrap:wrap;margin-top:8px">
+          <div><b>Valor solicitado:</b> <span id="r_valorSolic"></span></div>
+          <div><b>Valor aprovado:</b> <span id="r_valor"></span></div>
+          <div><b>Parcela (PRICE):</b> <span id="r_parcela"></span></div>
+          <div><b>Prazo:</b> <span id="r_prazo"></span></div>
+          <div><b>Limite calculado:</b> <span id="r_limite"></span></div>
+          <div><b>Taxa:</b> <span id="r_taxa"></span></div>
+          <div><b>Avalista:</b> <span id="r_avalista"></span></div>
+        </div>
+
+        <div class="hr"></div>
+        <details open>
+          <summary style="cursor:pointer">Ver tabela de amortização</summary>
+          <div style="overflow:auto;max-height:420px">
+            <table id="tabela">
+              <thead><tr><th>Mês</th><th>Saldo Inicial</th><th>Juros</th><th>Amortização</th><th>Parcela</th><th>Saldo Final</th></tr></thead>
+              <tbody></tbody>
+              <tfoot><tr><td>Total</td><td></td><td id="totJuros"></td><td id="totAmort"></td><td id="totParcelas"></td><td></td></tr></tfoot>
+            </table>
+          </div>
+        </details>
+
+        <p class="note" style="margin-top:10px">
+          *CET aproximado considera apenas juros. Custos/seguros não incluídos. Crédito sujeito à aprovação.
+        </p>
+      </section>
+    </div>
+  </div>
+
+<script>
+/* === Utils BRL === */
+function br(n){return (n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function parseBRL(str){ if(!str) return 0; return (parseInt(String(str).replace(/[^\d]/g,''),10)||0)/100; }
+
+function maskMoneyLive(inp){
+  let v = inp.value.replace(/[^\d]/g,'');
+  if(v==='') v='0';
+  v = (parseInt(v,10)/100).toFixed(2);
+  v = v.replace('.',',');
+  v = v.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  const posEnd = v.length;
+  inp.value = v;
+  try{ inp.setSelectionRange(posEnd, posEnd);}catch(e){}
+}
+
+function setupMoneyInput(inp){
+  inp.addEventListener('input', function(){ maskMoneyLive(inp); run(); });
+  inp.addEventListener('blur', function(){ maskMoneyLive(inp); });
+  if(!inp.value) inp.value='0,00'; else maskMoneyLive(inp);
+}
+
+/* === PRICE === */
+function pricePMT(P,i,n){ if(i===0) return P/n; return P*i/(1-Math.pow(1+i,-n)); }
+
+/* === Regras de limite por tempo === */
+function faixaPorMeses(m){
+  if(m<=6)  return {coef:0.5, maxP:5,  label:'até 6 meses'};
+  if(m<=12) return {coef:0.7, maxP:7,  label:'até 12 meses'};
+  if(m<=18) return {coef:1.0, maxP:10, label:'até 18 meses'};
+  if(m<=24) return {coef:1.5, maxP:15, label:'até 24 meses'};
+  return {coef:1.5, maxP:24, label:'acima de 25 meses'};
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('input.money').forEach(setupMoneyInput);
+  const prazoSel = document.getElementById('prazo');
+  for(let i=1;i<=24;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; prazoSel.appendChild(o); }
+  prazoSel.value = 12;
+
+  ['meses','prazo'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.addEventListener('input', run);
+    el.addEventListener('change', run);
+  });
+
+  document.getElementById('csv').addEventListener('click', downloadCSV);
+
+  run();
+});
+
+function run(){
+  const salario = parseBRL(document.getElementById('salario').value);
+  const meses   = +document.getElementById('meses').value||0;
+  const saldo   = parseBRL(document.getElementById('saldoCapital').value);
+  const dividas = parseBRL(document.getElementById('dividas').value);
+  const valor   = parseBRL(document.getElementById('valor').value);
+  let prazo     = +document.getElementById('prazo').value||12;
+
+  const regra   = faixaPorMeses(meses);
+  const limite  = Math.max(0, regra.coef*salario + saldo - dividas);
+
+  // Ajustes
+  let msgs=[]; let ajustou=false;
+  let aprovado = Math.min(valor, limite);
+  if(aprovado < valor){ msgs.push('Valor solicitado ajustado ao limite de crédito.'); ajustou=true; }
+  if(prazo > regra.maxP){ prazo = regra.maxP; msgs.push('Prazo ajustado para o máximo permitido por regra.'); ajustou=true; }
+
+  const i = 0.0199; // até 1,99% a.m.
+  const pmt = aprovado>0 && prazo>0 ? pricePMT(aprovado, i, prazo) : 0;
+
+  // CET aproximado
+  const cet_am = i;
+  const cet_aa = Math.pow(1+i,12)-1;
+
+  // Avalista (sujeito à análise quando valor > saldo de capital)
+  const precisaAvalista = aprovado > saldo;
+  const avalistaTxt = precisaAvalista ? 'Sujeito à análise' : 'Dispensado';
+
+  // KPIs
+  document.getElementById('r_valorSolic').textContent = br(valor);
+  document.getElementById('r_valor').textContent = br(aprovado);
+  document.getElementById('r_parcela').textContent = br(pmt);
+  document.getElementById('r_prazo').textContent = prazo + ' meses';
+  document.getElementById('r_limite').textContent = br(limite);
+  document.getElementById('r_taxa').textContent = '1,99% a.m.';
+  document.getElementById('r_avalista').textContent = avalistaTxt;
+
+  // Tabela PRICE
+  const tbody = document.querySelector('#tabela tbody');
+  tbody.innerHTML='';
+  let saldoInicial = aprovado, TJ=0, TA=0, TP=0;
+  for(let m=1;m<=prazo;m++){
+    const j = saldoInicial * i;
+    const a = pmt - j;
+    const sf = Math.max(0, saldoInicial - a);
+    TJ += j; TA += a; TP += pmt;
+    const tr = document.createElement('tr');
+    const td = (t)=>{ const e=document.createElement('td'); e.textContent=t; return e; }
+    tr.appendChild(td(m));
+    tr.appendChild(td(br(saldoInicial)));
+    tr.appendChild(td(br(j)));
+    tr.appendChild(td(br(a)));
+    tr.appendChild(td(br(pmt)));
+    tr.appendChild(td(br(sf)));
+    tbody.appendChild(tr);
+    saldoInicial = sf;
+  }
+  document.getElementById('totJuros').textContent = br(TJ);
+  document.getElementById('totAmort').textContent = br(TA);
+  document.getElementById('totParcelas').textContent = br(TP);
+
+  // Mensagens (incompatibilidade de renda)
+  const banner = document.getElementById('banner');
+  const rendaIncompativel = valor > limite;
+  if(!valor || !prazo){
+    banner.style.display='block';
+    banner.classList.remove('ok');
+    banner.innerHTML = 'Preencha os campos para simular. O limite considera sua renda pela regra da faixa e abate dívidas em andamento.';
+  }else if(rendaIncompativel){
+    const rendaNecessaria = regra.coef>0 ? Math.max(0, (valor - (saldo - dividas))/regra.coef) : Infinity;
+    banner.style.display='block';
+    banner.classList.remove('ok');
+    banner.innerHTML = '<b>Renda incompatível para esta solicitação.</b><br>'+
+      'Com seu salário atual, o valor máximo permitido é <b>'+br(limite)+'</b>.'+
+      ' Para solicitar <b>'+br(valor)+'</b>, sua renda mínima deveria ser <b>'+br(rendaNecessaria)+'</b>.';
+  }else if(ajustou){
+    banner.style.display='block';
+    banner.classList.remove('ok');
+    banner.innerHTML = '<b>Ajustes aplicados:</b> ' + msgs.join(' ');
+  }else{
+    banner.style.display='block';
+    banner.classList.add('ok');
+    banner.textContent = 'Simulação dentro das regras: '+regra.label+'. CET aprox: '+(cet_am*100).toFixed(2).replace('.',',')+'% a.m. / '+(cet_aa*100).toFixed(2).replace('.',',')+'% a.a.';
+  }
+
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('csv').disabled = !(aprovado>0 && prazo>0);
+
+  // para CSV
+  window._lastRows = { prazo, aprovado, i, rows: Array.from(document.querySelectorAll('#tabela tbody tr')).map(tr=>Array.from(tr.children).map(td=>td.textContent)) };
+}
+
+function downloadCSV(){
+  if(!window._lastRows) return;
+  const head = ['Mes','Saldo Inicial','Juros','Amortização','Parcela','Saldo Final'];
+  const lines = [head.join(';')];
+  window._lastRows.rows.forEach(r=> lines.push(r.join(';').replace(/R\$\s?/g,'')) );
+  const csv = lines.join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'credito_pessoal_price.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

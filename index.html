@@ -2,649 +2,74 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<base href=".">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-<title>Linhas de Crédito Cooperata.</title>
-
-<link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#3bd17f">
-<meta name="theme-color" content="#0b1720" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#0e2230" media="(prefers-color-scheme: light)">
-<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Cooperata Calc">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="Cooperata">
-
-<!-- Evita auto-link de telefones no iOS -->
-<meta name="format-detection" content="telephone=no">
-
-<!-- Meta tags adicionais para PWA -->
-<meta name="msapplication-TileColor" content="#0b1720">
-<meta name="msapplication-config" content="./browserconfig.xml">
-<meta name="robots" content="index, follow">
-<meta name="author" content="Cooperata">
-<meta name="description" content="Simuladores de crédito Cooperata - Calcule suas parcelas e condições de empréstimo">
-
-<!-- Prevenção de zoom indesejado -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="format-detection" content="telephone=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linhas de Crédito — Cooperata</title>
 <style>
-  :root{--bg:#0b1720;--card:#0f2330;--ink:#e8f1f7;--muted:#a6c0d0;--accent:#3bd17f;--shadow:rgba(0,0,0,.25);--border:#173244}
+  :root{
+    --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f;
+    --accent-2:#58a6ff; --danger:#ff6b6b; --shadow:rgba(0,0,0,.25);
+  }
   *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto;
-  background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-  header{padding:28px 18px 0;text-align:center} h1{margin:0 0 6px;font-size:clamp(22px,4vw,40px)} .sub{margin:0;color:var(--muted)}
-  .wrap{max-width:1100px;margin:26px auto;padding:0 16px 40px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px} @media (max-width:900px){.grid{grid-template-columns:1fr}}
-  .card{display:flex;gap:18px;align-items:center;padding:20px;border-radius:18px;background:var(--card);border:1px solid var(--border);cursor:pointer;box-shadow:0 12px 30px var(--shadow)}
-  .icobg{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#102633;border:1px solid #1d3f55}
-  .ico{font-size:30px} .title{font-size:22px;font-weight:800;margin:0 0 6px} .desc{font-size:13px;color:var(--muted)}
-  .panel-wrap{max-width:1100px;margin:0 auto;padding:0 16px 60px;display:none;width:100%}
-  .back{appearance:none;border:1px solid #214155;background:#0a1a24;color:#e8f1f7;padding:10px 14px;border-radius:12px;cursor:pointer;margin-bottom:14px}
-  iframe{display:block;width:100%;border:1px solid #173244;border-radius:16px;background:#0f2330;box-shadow:0 10px 30px var(--shadow)}
-  footer{max-width:1100px;margin:6px auto 8px;padding:0 16px;text-align:center;color:#a6c0d0;font-size:12px}
-  .about{max-width:1000px;margin:8px auto 36px;padding:14px 16px;border:1px solid var(--border);background:#0c1f2b;border-radius:16px;margin-top:auto}
-  .about h3{margin:0 0 4px} .about h4{margin:0 0 6px;color:#cfe1ec} .about p{margin:0;color:#cfe1ec;font-size:13px;line-height:1.5}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+       color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}
+  header{padding:28px 18px 8px;text-align:center}
+  h1{margin:4px 0 6px;font-size:clamp(22px,3.8vw,34px);letter-spacing:.2px}
+  p{margin:0;color:var(--muted)}
+  .wrap{max-width:980px;margin:24px auto;padding:0 16px 60px}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:18px;justify-items:stretch}
+  @media (max-width:720px){.grid{grid-template-columns:1fr}}
+  a.card{display:flex;gap:16px;align-items:center;padding:18px;border-radius:16px;
+         background:var(--card);border:1px solid #173244;text-decoration:none;color:var(--ink);
+         box-shadow:0 10px 30px var(--shadow);transition:transform .08s ease, border-color .12s ease}
+  a.card:hover{transform:translateY(-2px);border-color:#2c5770}
+  .icon{font-size:42px;line-height:1}
+  .title{font-size:20px;font-weight:800;margin-bottom:4px}
+  .desc{font-size:13px;color:var(--muted)}
+  footer{max-width:980px;margin:18px auto 40px;padding:0 16px;color:var(--muted);font-size:12px;text-align:center}
 </style>
-  
-  <!-- Ajustes de viewport real e safe-area para apps PWA -->
-  <style>
-    :root{
-      /* fallback para navegadores sem dvh/svh */
-      --app-viewport-h: 100dvh;
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-left: env(safe-area-inset-left, 0px);
-      --safe-right: env(safe-area-inset-right, 0px);
-    }
-    html, body { 
-      height: 100%; 
-      background: #0b1720; 
-      overflow-x: hidden; /* Previne scroll horizontal */
-    }
-    /* Usa a altura real da tela no PWA */
-    body{
-      min-height: var(--app-viewport-h);
-      min-height: 100svh; /* iOS 16+ */
-      padding-top: max(0px, var(--safe-top));
-      padding-bottom: max(0px, var(--safe-bottom));
-      padding-left: max(0px, var(--safe-left));
-      padding-right: max(0px, var(--safe-right));
-      overscroll-behavior: contain;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      /* Previne bounce no iOS */
-      -webkit-overflow-scrolling: touch;
-      position: relative;
-    }
-    
-    /* Permite seleção de texto em inputs e elementos específicos */
-    input, textarea, select, [contenteditable] {
-      -webkit-user-select: text;
-      -moz-user-select: text;
-      -ms-user-select: text;
-      user-select: text;
-    }
-    
-    /* Melhora a experiência de toque */
-    button, .card, .btn {
-      -webkit-tap-highlight-color: rgba(59, 209, 127, 0.2);
-      touch-action: manipulation;
-    }
-    
-    /* Previne zoom em inputs no iOS */
-    input, select, textarea {
-      font-size: 16px !important;
-      transform: translateZ(0);
-    }
-  </style>
-
-  <!-- ============================
-       Linhas de Crédito — Grid e Cards
-       Nota: largura/altura dos cards são
-       controladas por .credit-card dentro de #linhas-credito.
-       ============================ -->
-  <style>
-    /* Wrapper: grid 2 col (≥768px) e 1 col (<768px); gap consistente */
-    #linhas-credito { display: grid; gap: 24px; align-items: stretch; justify-items: stretch; }
-    @media (max-width: 767px) { #linhas-credito { grid-template-columns: 1fr; } }
-    @media (min-width: 768px) { #linhas-credito { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-
-    /* Anti-vazamento: filhos e cards ocupam 100% sem max-width conflitante */
-    #linhas-credito > * { width: 100%; box-sizing: border-box; }
-    #linhas-credito .credit-card { width: 100%; max-width: none; box-sizing: border-box; }
-
-    /* Altura uniforme e layout interno */
-    #linhas-credito .credit-card { display: flex; align-items: center; gap: 16px; min-height: 120px; }
-
-    /* Ícone fixo para não alterar a altura */
-    #linhas-credito .icobg { width: 56px; height: 56px; flex: 0 0 56px; display:flex; align-items:center; justify-content:center; }
-    #linhas-credito .ico { font-size: 30px; line-height: 1; }
-
-    /* Texto resiliente (ellipsis) */
-    #linhas-credito .title, #linhas-credito .desc { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    #linhas-credito .title { font-weight: 800; }
-
-    /* Foco acessível (sem alterar paleta) */
-    #linhas-credito .credit-card:focus-visible,
-    #linhas-credito .credit-card:focus-within { outline: 2px solid #3bd17f; outline-offset: 2px; }
-  </style>
-
-  <!-- Fix de vh: usa innerHeight real em qualquer modo -->
-  <script>
-    (function fixViewportVH(){
-      const set = () => {
-        // Usa innerHeight real em qualquer modo
-        document.documentElement.style.setProperty('--app-viewport-h', window.innerHeight + 'px');
-      };
-      set();
-      window.addEventListener('resize', set, { passive: true });
-      window.addEventListener('orientationchange', set, { passive: true });
-    })();
-  </script>
-  
-  <!-- ================================
-       Hotfix Mobile Responsivo (não altera desktop)
-       ================================ -->
-  <style>
-    /* Centraliza e limita largura geral */
-    .wrap,
-    .card,
-    section.card.results {
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* Imagens/ícones nunca estouram */
-    img, svg { max-width: 100%; height: auto; }
-
-    /* Ajustes específicos para telas menores */
-    @media (max-width: 960px) {
-      /* Grid principal vira 1 coluna */
-      .grid { 
-        grid-template-columns: 1fr !important; 
-        gap: 14px;
-      }
-
-      /* Form em 1 coluna (inputs empilhados) */
-      fieldset { 
-        grid-template-columns: 1fr !important; 
-        gap: 12px; 
-      }
-
-      /* Cards com padding mais compacto */
-      .card { 
-        padding: 16px !important; 
-        border-radius: 14px !important; 
-        margin: 0 8px; /* Margem lateral para não colar nas bordas */
-      }
-
-      /* KPIs em 2 colunas no mobile grande */
-      .kpis { 
-        grid-template-columns: 1fr 1fr !important; 
-        gap: 10px; 
-      }
-
-      /* Linhas com botões e observações quebram bem */
-      .row { 
-        flex-wrap: wrap; 
-        gap: 10px; 
-      }
-
-      /* Botões principais podem ocupar a linha toda se faltar espaço */
-      .row .btn { 
-        flex: 1 1 160px; 
-        min-height: 44px; /* Tamanho mínimo para toque */
-      }
-
-      /* tabela rolável no mobile */
-      .results details > div,
-      .results .table-wrap,
-      .results [style*="overflow:auto"] {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      /* Garante largura mínima interna da tabela para não amassar colunas */
-      .results table { 
-        min-width: 720px; 
-      }
-
-      /* Padding lateral confortável no container */
-      .wrap { 
-        padding-left: 12px; 
-        padding-right: 12px; 
-      }
-      
-      /* Header mais compacto no mobile */
-      header {
-        padding: 20px 12px 0;
-      }
-      
-      /* Footer mais compacto */
-      footer {
-        padding: 0 12px;
-        margin-bottom: 20px;
-      }
-      
-      /* About section mais compacta */
-      .about {
-        margin: 8px 12px 20px;
-        padding: 12px;
-      }
-    }
-
-    /* Mobile bem pequeno: KPIs viram 1 coluna */
-    @media (max-width: 520px) {
-      .kpis { 
-        grid-template-columns: 1fr !important; 
-      }
-
-      /* Botões em linha cheia */
-      .row .btn { 
-        width: 100%; 
-        min-height: 48px; /* Ainda maior para telas pequenas */
-      }
-      
-      /* Cards ainda mais compactos */
-      .card {
-        margin: 0 4px;
-        padding: 12px !important;
-      }
-      
-      /* Header ainda mais compacto */
-      header {
-        padding: 16px 8px 0;
-      }
-      
-      /* Wrap com menos padding */
-      .wrap {
-        padding-left: 8px;
-        padding-right: 8px;
-      }
-      
-      /* About section ainda mais compacta */
-      .about {
-        margin: 8px 8px 16px;
-        padding: 10px;
-      }
-      
-      /* Footer com menos espaço */
-      footer {
-        padding: 0 8px;
-        margin-bottom: 16px;
-      }
-    }
-  </style>
-
-  <!-- ===== Banner de instalação PWA (mobile only) ===== -->
-  <style>
-    #pwa-install-banner {
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
-      z-index: 9999;
-      background: #0c1f2b;
-      border: 1px solid #173244;
-      color: #e8f1f7;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      display: none;
-      padding: 12px;
-      font-family: inherit;
-    }
-
-    #pwa-install-banner.show { display: block; }
-
-    #pwa-install-banner .pwa-row {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    #pwa-install-banner .pwa-text {
-      flex: 1;
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    #pwa-install-banner .pwa-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    #pwa-install-banner .pwa-btn {
-      appearance: none;
-      border: 1px solid #214155;
-      background: #0a1a24;
-      color: #e8f1f7;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    #pwa-install-banner .pwa-btn.primary {
-      background: #3bd17f;
-      color: #052213;
-      border-color: #2da365;
-    }
-
-    #pwa-install-banner .pwa-close {
-      appearance: none;
-      border: 0;
-      background: transparent;
-      color: #a6c0d0;
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-      padding: 4px 6px;
-    }
-
-    /* iOS dica */
-    #pwa-install-banner .ios-tip {
-      font-size: 12px;
-      color: #cfe1ec;
-      margin-top: 2px;
-    }
-
-    /* Só mobile */
-    @media (min-width: 960px) {
-      #pwa-install-banner { display: none !important; }
-    }
-  </style>
-
-  <!-- =====================================================
-       Unificação de layout — aplica o estilo Veículos às
-       páginas Pessoal, Refinanciamento e Construção
-       (sem alterar desktop e sem mexer em JS/HTML)
-       ===================================================== -->
-  <style>
-    /* Centraliza e limita a largura de todo o conteúdo */
-    .wrap,
-    main,
-    section.card.results {
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 16px;
-      padding-right: 16px;
-    }
-
-    /* Visual de card consistente com o de Veículos */
-    .card {
-      background: var(--card);
-      border: 1px solid #173244;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    }
-
-    /* Formulário em duas colunas, como no Veículos */
-    fieldset {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    fieldset .full { grid-column: 1 / -1; }
-
-    /* Inputs/selects ocupam 100% da coluna */
-    input, select { width: 100%; }
-
-    /* KPIs e linhas auxiliares consistentes */
-    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-
-    /* Resultados — tabela: não amassar colunas no mobile */
-    .results details > div,
-    .results .table-wrap,
-    .results [style*="overflow:auto"] {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .results table { min-width: 720px; }
-
-    /* ====== Responsivo — igual ao Veículos ====== */
-    @media (max-width: 960px) {
-      /* Grids viram 1 coluna */
-      .grid { grid-template-columns: 1fr !important; gap: 14px; }
-      fieldset { grid-template-columns: 1fr; gap: 12px; }
-
-      /* KPIs em 2 colunas */
-      .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
-
-      /* Cards mais compactos */
-      .card { padding: 16px; border-radius: 14px; }
-
-      /* Botões podem ocupar linha toda quando necessário */
-      .row .btn { flex: 1 1 160px; }
-    }
-
-    @media (max-width: 520px) {
-      /* KPIs em 1 coluna nos aparelhos menores */
-      .kpis { grid-template-columns: 1fr; }
-
-      /* Botões realmente de ponta a ponta quando falta espaço */
-      .row .btn { width: 100%; }
-    }
-  </style>
-
-  <script>
-    (function () {
-      // ===== Utilidades =====
-      const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
-        (window.navigator && window.navigator.standalone === true); // iOS
-      const ua = (navigator.userAgent || '').toLowerCase();
-      const isMobile = /(iphone|ipad|ipod|android|mobile)/i.test(ua);
-      const isIOS = /(iphone|ipad|ipod)/i.test(ua);
-      const storage = window.localStorage;
-      const DISMISSED_KEY = 'pwa-install-dismissed';
-      const INSTALLED_KEY = 'pwa-installed';
-
-      // Não mostrar se não for mobile, já estiver em standalone ou já instalado
-      if (!isMobile || isStandalone || storage.getItem(INSTALLED_KEY) === '1') return;
-
-      let deferredPrompt = null;
-      let banner;
-
-      // Cria o banner via DOM (sem alterar HTML existente)
-      function ensureBanner() {
-        if (document.getElementById('pwa-install-banner')) return;
-        banner = document.createElement('div');
-        banner.id = 'pwa-install-banner';
-
-        const title = 'Instale o simulador Cooperata';
-        const iosSteps = 'No iPhone: toque no ícone de compartilhar e depois em Adicionar à Tela de Início.';
-
-        banner.innerHTML = (
-          '<div class="pwa-row">' +
-            '<button class="pwa-close" aria-label="Fechar" title="Fechar">&times;</button>' +
-            '<div class="pwa-text">' +
-              '<strong>' + title + '</strong><br>' +
-              '<span class="pwa-msg">Tenha acesso rápido na tela inicial.</span>' +
-              '<div class="ios-tip" style="display:none">' + iosSteps + '</div>' +
-            '</div>' +
-            '<div class="pwa-actions">' +
-              '<button class="pwa-btn" id="pwa-later">Depois</button>' +
-              '<button class="pwa-btn primary" id="pwa-install">Instalar</button>' +
-            '</div>' +
-          '</div>'
-        );
-        document.body.appendChild(banner);
-
-        // Eventos
-        banner.querySelector('.pwa-close').addEventListener('click', dismiss);
-        banner.querySelector('#pwa-later').addEventListener('click', dismiss);
-        banner.querySelector('#pwa-install').addEventListener('click', onInstallClick);
-      }
-
-      function showBanner(forIOS = false) {
-        ensureBanner();
-        if (!banner) banner = document.getElementById('pwa-install-banner');
-        if (!banner) return;
-        if (storage.getItem(DISMISSED_KEY) === '1') return; // não encher
-        // Ajusta mensagem iOS
-        const tip = banner.querySelector('.ios-tip');
-        const msg = banner.querySelector('.pwa-msg');
-        if (tip) tip.style.display = forIOS ? 'block' : 'none';
-        if (msg) msg.style.display = forIOS ? 'none' : 'inline';
-        banner.classList.add('show');
-      }
-
-      function hideBanner() {
-        if (!banner) banner = document.getElementById('pwa-install-banner');
-        if (banner) banner.classList.remove('show');
-      }
-
-      function dismiss() {
-        storage.setItem(DISMISSED_KEY, '1'); // lembrar que usuário dispensou
-        hideBanner();
-      }
-
-      async function onInstallClick() {
-        if (isIOS) {
-          // iOS não tem beforeinstallprompt. Mostramos instruções e não fechamos automaticamente.
-          showBanner(true);
-          return;
-        }
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        const result = await deferredPrompt.userChoice.catch(() => ({}));
-        deferredPrompt = null;
-        if (result && result.outcome === 'accepted') {
-          storage.setItem(INSTALLED_KEY, '1');
-          hideBanner();
-        } else {
-          // usuário recusou
-          storage.setItem(DISMISSED_KEY, '1');
-          hideBanner();
-        }
-      }
-
-      // Quando o app for instalado
-      window.addEventListener('appinstalled', () => {
-        storage.setItem(INSTALLED_KEY, '1');
-        hideBanner();
-      });
-
-      // Android/Chrome: capturar o evento e controlar o prompt
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        // Mostra banner só se não estiver dispensado
-        if (storage.getItem(DISMISSED_KEY) !== '1') {
-          // pequena espera para não ser intrusivo
-          setTimeout(() => showBanner(false), 800);
-        }
-      });
-
-      // iOS: não há beforeinstallprompt, então exibimos instruções
-      document.addEventListener('DOMContentLoaded', () => {
-        // Se não estivermos em standalone e não houver deferredPrompt (iOS)
-        if (isIOS && !isStandalone && storage.getItem(DISMISSED_KEY) !== '1') {
-          // esperar um pouco para não ser agressivo
-          setTimeout(() => showBanner(true), 1200);
-        }
-      });
-    })();
-  </script>
-  
-  <!-- ============================
-       Grade do menu (2×2 simétrico)
-       ============================ -->
-  <style>
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(360px, 1fr)); /* 2 colunas iguais */
-      gap: 24px;
-      align-items: stretch;     /* força os cards a terem mesma altura */
-      justify-items: stretch;   /* os cards ocupam a coluna inteira */
-      max-width: 1100px;
-      margin: 0 auto;           /* centraliza o bloco na página */
-      padding: 0 16px;
-    }
-
-    /* Faz cada card crescer para preencher a célula */
-    .menu-grid > * {
-      height: 100%;
-    }
-
-    /* Garante que o card-link tenha altura fluida e conteúdo bem alinhado */
-    .menu-grid .card,
-    .menu-grid a,
-    .menu-grid .card-link {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      height: 100%;
-    }
-
-    /* Ícone fixo + texto elástico: */
-    .menu-grid .icon,
-    .menu-grid .card .icon {
-      flex: 0 0 auto;
-    }
-    .menu-grid .text,
-    .menu-grid .card .text {
-      flex: 1 1 auto;
-    }
-
-    /* Responsivo: no celular, 1 coluna */
-    @media (max-width: 960px) {
-      .menu-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 0 12px;
-      }
-    }
-  </style>
 </head>
 <body>
-  <header><h1>Linhas de Crédito Cooperata.</h1><p class="sub">Escolha a linha para abrir o simulador correspondente.</p></header>
+  <header>
+    <h1>Linhas de Crédito</h1>
+    <p>Escolha a linha para abrir o simulador correspondente.</p>
+  </header>
 
-  <div class="wrap" id="cards">
-    <div class="grid" id="linhas-credito">
-      <div class="card credit-card" data-open="pessoal"><span class="icobg"><span class="ico">🛩️</span></span><div class="text"><div class="title">Linha de Crédito — <b>Pessoal</b></div><div class="desc">1,99% a.m. • até 24x • PRICE.</div></div></div>
-      <div class="card credit-card" data-open="refi"><span class="icobg"><span class="ico">💱</span></span><div class="text"><div class="title">Linha de Crédito — <b>Refinanciamento</b></div><div class="desc">2,99% a.m. • até 24x • PRICE.</div></div></div>
-      <div class="card credit-card" data-open="construcao"><span class="icobg"><span class="ico">🛠️</span></span><div class="text"><div class="title">Linha de Crédito — <b>Construção</b></div><div class="desc">1,99% a.m. • até 24x • PRICE.</div></div></div>
-      <div class="card credit-card" data-open="carro"><span class="icobg"><span class="ico">🚗</span></span><div class="text"><div class="title">Linha de Crédito — <b>Carro</b></div><div class="desc">1,70% a.m. • até 48x • PRICE.</div></div></div>
+  <div class="wrap">
+    <div class="grid">
+      <a class="card" href="simulador-pessoal.html">
+        <div class="icon">🛩️</div>
+        <div>
+          <div class="title">Linha de Crédito — Pessoal</div>
+          <div class="desc">Empréstimo para qualquer finalidade. Até 1,99% a.m. • até 24x • PRICE.</div>
+        </div>
+      </a>
+
+      <a class="card" href="simulador-refinanciamento.html">
+        <div class="icon">💱</div>
+        <div>
+          <div class="title">Linha de Crédito — Refinanciamento</div>
+          <div class="desc">Quitar dívidas mais caras. Até 2,99% a.m. • até 24x • PRICE.</div>
+        </div>
+      </a>
+
+      <a class="card" href="simulador-construcao.html">
+        <div class="icon">🛠️</div>
+        <div>
+          <div class="title">Linha de Crédito — Construção</div>
+          <div class="desc">Reforma/Construção/Compra de imóvel. 1,99% a.m. • até 24x • PRICE.</div>
+        </div>
+      </a>
+
+      <a class="card" href="simulador-Financiamento%20carro.html">
+        <div class="icon">🚗</div>
+        <div>
+          <div class="title">Linha de Crédito — Carro</div>
+          <div class="desc">Financiamento de veículo (FIPE). 1,70% a.m. • até 48x • PRICE.</div>
+        </div>
+      </a>
     </div>
   </div>
 
-  <div class="panel-wrap" id="panel"><button class="back" id="voltar">← Voltar</button><iframe id="frame"></iframe></div>
-
-  <footer>© Cooperata — simuladores para apoio à decisão. Valores sujeitos à análise.</footer>
-
-  <section class="about">
-    <h3>COOPERATA</h3><h4>Canal de Indícios de Ilicitudes</h4>
-    <p>A Cooperata é uma instituição financeira sem fins lucrativos, fiscalizada e autorizada a funcionar pelo Banco Central do Brasil. Seus objetivos principais são: incentivar a constituição de poupança/capital com ótimo rendimento, conceder empréstimos a juros acessíveis e ajudar a minimizar os problemas socioeconômicos dos associados, oferecendo orientação financeira aos associados e a segurança de ser dono e usuário.</p>
-  </section>
-
-  <script id="doc-pessoal" type="application/json">"<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"utf-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n<title>Simulador — Crédito Pessoal | Cooperata</title>\n<style>\n  :root{ --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f; --danger:#ff6b6b; --warn:#ffd166; }\n  *{box-sizing:border-box}\n  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}\n  header{padding:28px 18px 8px;text-align:center}\n  header h1{margin:4px 0 6px;font-size:clamp(20px,3.5vw,28px)}\n  header p{margin:0;color:var(--muted)}\n  .wrap{max-width:1100px;margin:18px auto;padding:0 16px 60px}\n  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}\n  @media (max-width:960px){.grid{grid-template-columns:1fr}}\n  .card{background:var(--card);border:1px solid #173244;border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}\n  .card h2{margin:0 0 10px;font-size:18px}\n  fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}\n  fieldset .full{grid-column:1/-1}\n  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}\n  input,select{width:100%;padding:12px;border:1px solid #234458;background:#0a1a24;color:var(--ink);border-radius:10px;font-size:15px;outline:none}\n  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}\n  .results .row{align-items:baseline}\n  .note{font-size:12px;color:var(--muted)}\n  .btn{appearance:none;border:0;background:var(--accent);color:#052213;padding:12px 14px;border-radius:12px;font-weight:700;cursor:pointer}\n  .btn.secondary{background:#0a1a24;color:var(--ink);border:1px solid #214155}\n  .btn:disabled{opacity:.6;cursor:not-allowed}\n  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}\n  th,td{border-bottom:1px solid #163448;padding:10px 8px;text-align:right}\n  th:first-child,td:first-child{text-align:left}\n  tfoot td{font-weight:700}\n  .hr{height:1px;background:#173244;margin:16px 0}\n  .banner{background:#2b0f12;border:1px solid #6e2a33;color:#ffc9c9;padding:10px;border-radius:10px;margin:6px 0;display:none}\n  .ok{background:#0f2b18;border:1px solid #2a6b46;color:#b9f3d3}\n  \n  /* Otimizações específicas para mobile */\n  @media (max-width: 960px) {\n    header{padding:20px 12px 6px}\n    header h1{font-size:clamp(18px,3vw,24px);margin:2px 0 4px}\n    header p{font-size:12px;line-height:1.3}\n    .wrap{margin:12px auto;padding:0 12px 40px}\n    .grid{gap:12px}\n    .card{padding:14px;border-radius:12px}\n    .card h2{font-size:16px;margin:0 0 8px}\n    fieldset{gap:10px}\n    label{font-size:12px;margin:0 0 4px}\n    input,select{padding:10px;font-size:14px}\n    .note{font-size:11px;line-height:1.4}\n    .row{gap:8px;margin-top:6px}\n    .btn{padding:10px 12px;font-size:13px}\n    table{font-size:12px}\n    th,td{padding:8px 6px}\n    .hr{margin:12px 0}\n    .banner{padding:8px;margin:4px 0;font-size:12px}\n  }\n  \n  @media (max-width: 520px) {\n    header{padding:16px 8px 4px}\n    header h1{font-size:clamp(16px,4vw,20px)}\n    .wrap{margin:8px auto;padding:0 8px 30px}\n    .card{padding:12px}\n    fieldset{gap:8px}\n    input,select{padding:8px;font-size:13px}\n    .note{font-size:10px}\n    table{font-size:11px}\n    th,td{padding:6px 4px}\n  }\n</style>\n</head>\n<body>\n  <header>\n    <h1>Linha de Crédito — <b>Pessoal</b></h1>\n    <p>Finalidade: empréstimo para qualquer finalidade. Se houver saldo devedor atual, avaliar a linha de <b>Refinanciamento</b>.<br>\n       Até <b>1,99% a.m.</b> • Em até <b>24x</b> • Sistema <b>PRICE</b></p>\n  </header>\n\n  <div class=\"wrap\">\n    <div class=\"grid\">\n      <!-- FORM -->\n      <section class=\"card\">\n        <h2>Dados para Simulação</h2>\n        <fieldset>\n          <div>\n            <label>Salário mensal (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"salario\" inputmode=\"decimal\" placeholder=\"ex: 3.000,00\">\n          </div>\n          <div>\n            <label>Tempo como associado (meses)</label>\n            <input type=\"number\" id=\"meses\" min=\"0\" step=\"1\" placeholder=\"ex: 18\">\n          </div>\n\n          <div>\n            <label>Saldo de capital (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"saldoCapital\" inputmode=\"decimal\" value=\"0,00\">\n          </div>\n          <div>\n            <label>Saldo devedor de outros empréstimos (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"dividas\" inputmode=\"decimal\" value=\"0,00\">\n          </div>\n\n          <div class=\"full\">\n            <label>Valor que deseja solicitar (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"valor\" inputmode=\"decimal\" placeholder=\"ex: 10.000,00\">\n          </div>\n\n          <div>\n            <label>Prazo (meses) — máx. conforme regra</label>\n            <select id=\"prazo\"></select>\n          </div>\n          <div>\n            <label>Taxa de juros (a.m.) — até 1,99%</label>\n            <input type=\"text\" id=\"taxa\" value=\"1,99% a.m.\" disabled>\n          </div>\n\n          <div class=\"full row\" style=\"margin-top:8px\">\n            <button class=\"btn secondary\" id=\"csv\" type=\"button\" disabled>Baixar CSV</button>\n          </div>\n\n          <div class=\"full note\">\n            <b>Regras por tempo de associação:</b><br>\n            ≤6m: <b>0,5 salário + saldo</b> (até 5x) •\n            ≤12m: <b>0,7 salário + saldo</b> (até 7x) •\n            ≤18m: <b>1,0 salário + saldo</b> (até 10x) •\n            ≤24m: <b>1,5 salários + saldo</b> (até 15x) •\n            ≥25m: <b>1,5 salários + saldo</b> (até 24x). Abate dívidas em andamento. Crédito sujeito à aprovação.<br>\n            <b>Avalista:</b> valores acima do saldo de capital sujeitos à análise.\n          </div>\n        </fieldset>\n      </section>\n\n      <!-- RESULT -->\n      <section class=\"card results\" id=\"resultCard\" style=\"display:none\">\n        <h2>Resultado da Simulação</h2>\n        <div id=\"banner\" class=\"banner\"></div>\n        <div class=\"row\" style=\"gap:12px;flex-wrap:wrap;margin-top:8px\">\n          <div><b>Valor solicitado:</b> <span id=\"r_valorSolic\"></span></div>\n          <div><b>Valor aprovado:</b> <span id=\"r_valor\"></span></div>\n          <div><b>Parcela (PRICE):</b> <span id=\"r_parcela\"></span></div>\n          <div><b>Prazo:</b> <span id=\"r_prazo\"></span></div>\n          <div><b>Limite calculado:</b> <span id=\"r_limite\"></span></div>\n          <div><b>Taxa:</b> <span id=\"r_taxa\"></span></div>\n          <div><b>Avalista:</b> <span id=\"r_avalista\"></span></div>\n        </div>\n\n        <div class=\"hr\"></div>\n        <details open>\n          <summary style=\"cursor:pointer\">Ver tabela de amortização</summary>\n          <div style=\"overflow:auto;max-height:420px\">\n            <table id=\"tabela\">\n              <thead><tr><th>Mês</th><th>Saldo Inicial</th><th>Juros</th><th>Amortização</th><th>Parcela</th><th>Saldo Final</th></tr></thead>\n              <tbody></tbody>\n              <tfoot><tr><td>Total</td><td></td><td id=\"totJuros\"></td><td id=\"totAmort\"></td><td id=\"totParcelas\"></td><td></td></tr></tfoot>\n            </table>\n          </div>\n        </details>\n\n        <p class=\"note\" style=\"margin-top:10px\">\n          *CET aproximado considera apenas juros. Custos/seguros não incluídos. Crédito sujeito à aprovação.\n        </p>\n      </section>\n    </div>\n  </div>\n\n<script>\n/* === Utils BRL === */\nfunction br(n){return (n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}\nfunction parseBRL(str){ if(!str) return 0; return (parseInt(String(str).replace(/[^\\d]/g,''),10)||0)/100; }\n\nfunction maskMoneyLive(inp){\n  let v = inp.value.replace(/[^\\d]/g,'');\n  if(v==='') v='0';\n  v = (parseInt(v,10)/100).toFixed(2);\n  v = v.replace('.',',');\n  v = v.replace(/\\B(?=(\\d{3})+(?!\\d))/g,'.');\n  const posEnd = v.length;\n  inp.value = v;\n  try{ inp.setSelectionRange(posEnd, posEnd);}catch(e){}\n}\n\nfunction setupMoneyInput(inp){\n  inp.addEventListener('input', function(){ maskMoneyLive(inp); run(); });\n  inp.addEventListener('blur', function(){ maskMoneyLive(inp); });\n  if(!inp.value) inp.value='0,00'; else maskMoneyLive(inp);\n}\n\n/* === PRICE === */\nfunction pricePMT(P,i,n){ if(i===0) return P/n; return P*i/(1-Math.pow(1+i,-n)); }\n\n/* === Regras de limite por tempo === */\nfunction faixaPorMeses(m){\n  if(m<=6)  return {coef:0.5, maxP:5,  label:'até 6 meses'};\n  if(m<=12) return {coef:0.7, maxP:7,  label:'até 12 meses'};\n  if(m<=18) return {coef:1.0, maxP:10, label:'até 18 meses'};\n  if(m<=24) return {coef:1.5, maxP:15, label:'até 24 meses'};\n  return {coef:1.5, maxP:24, label:'acima de 25 meses'};\n}\n\nwindow.addEventListener('DOMContentLoaded', function(){\n  document.querySelectorAll('input.money').forEach(setupMoneyInput);\n  const prazoSel = document.getElementById('prazo');\n  for(let i=1;i<=24;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; prazoSel.appendChild(o); }\n  prazoSel.value = 12;\n\n  ['meses','prazo'].forEach(id=>{\n    const el = document.getElementById(id);\n    el.addEventListener('input', run);\n    el.addEventListener('change', run);\n  });\n\n  document.getElementById('csv').addEventListener('click', downloadCSV);\n\n  run();\n});\n\nfunction run(){\n  const salario = parseBRL(document.getElementById('salario').value);\n  const meses   = +document.getElementById('meses').value||0;\n  const saldo   = parseBRL(document.getElementById('saldoCapital').value);\n  const dividas = parseBRL(document.getElementById('dividas').value);\n  const valor   = parseBRL(document.getElementById('valor').value);\n  let prazo     = +document.getElementById('prazo').value||12;\n\n  const regra   = faixaPorMeses(meses);\n  const limite  = Math.max(0, regra.coef*salario + saldo - dividas);\n\n  // Ajustes\n  let msgs=[]; let ajustou=false;\n  let aprovado = Math.min(valor, limite);\n  if(aprovado < valor){ msgs.push('Valor solicitado ajustado ao limite de crédito.'); ajustou=true; }\n  if(prazo > regra.maxP){ prazo = regra.maxP; msgs.push('Prazo ajustado para o máximo permitido por regra.'); ajustou=true; }\n\n  const i = 0.0199; // até 1,99% a.m.\n  const pmt = aprovado>0 && prazo>0 ? pricePMT(aprovado, i, prazo) : 0;\n\n  // CET aproximado\n  const cet_am = i;\n  const cet_aa = Math.pow(1+i,12)-1;\n\n  // Avalista (sujeito à análise quando valor > saldo de capital)\n  const precisaAvalista = aprovado > saldo;\n  const avalistaTxt = precisaAvalista ? 'Sujeito à análise' : 'Dispensado';\n\n  // KPIs\n  document.getElementById('r_valorSolic').textContent = br(valor);\n  document.getElementById('r_valor').textContent = br(aprovado);\n  document.getElementById('r_parcela').textContent = br(pmt);\n  document.getElementById('r_prazo').textContent = prazo + ' meses';\n  document.getElementById('r_limite').textContent = br(limite);\n  document.getElementById('r_taxa').textContent = '1,99% a.m.';\n  document.getElementById('r_avalista').textContent = avalistaTxt;\n\n  // Tabela PRICE\n  const tbody = document.querySelector('#tabela tbody');\n  tbody.innerHTML='';\n  let saldoInicial = aprovado, TJ=0, TA=0, TP=0;\n  for(let m=1;m<=prazo;m++){\n    const j = saldoInicial * i;\n    const a = pmt - j;\n    const sf = Math.max(0, saldoInicial - a);\n    TJ += j; TA += a; TP += pmt;\n    const tr = document.createElement('tr');\n    const td = (t)=>{ const e=document.createElement('td'); e.textContent=t; return e; }\n    tr.appendChild(td(m));\n    tr.appendChild(td(br(saldoInicial)));\n    tr.appendChild(td(br(j)));\n    tr.appendChild(td(br(a)));\n    tr.appendChild(td(br(pmt)));\n    tr.appendChild(td(br(sf)));\n    tbody.appendChild(tr);\n    saldoInicial = sf;\n  }\n  document.getElementById('totJuros').textContent = br(TJ);\n  document.getElementById('totAmort').textContent = br(TA);\n  document.getElementById('totParcelas').textContent = br(TP);\n\n  // Mensagens (incompatibilidade de renda)\n  const banner = document.getElementById('banner');\n  const rendaIncompativel = valor > limite;\n  if(!valor || !prazo){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = 'Preencha os campos para simular. O limite considera sua renda pela regra da faixa e abate dívidas em andamento.';\n  }else if(rendaIncompativel){\n    const rendaNecessaria = regra.coef>0 ? Math.max(0, (valor - (saldo - dividas))/regra.coef) : Infinity;\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Renda incompatível para esta solicitação.</b><br>'+\n      'Com seu salário atual, o valor máximo permitido é <b>'+br(limite)+'</b>.'+\n      ' Para solicitar <b>'+br(valor)+'</b>, sua renda mínima deveria ser <b>'+br(rendaNecessaria)+'</b>.';\n  }else if(ajustou){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Ajustes aplicados:</b> ' + msgs.join(' ');\n  }else{\n    banner.style.display='block';\n    banner.classList.add('ok');\n    banner.textContent = 'Simulação dentro das regras: '+regra.label+'. CET aprox: '+(cet_am*100).toFixed(2).replace('.',',')+'% a.m. / '+(cet_aa*100).toFixed(2).replace('.',',')+'% a.a.';\n  }\n\n  document.getElementById('resultCard').style.display='block';\n  document.getElementById('csv').disabled = !(aprovado>0 && prazo>0);\n\n  // para CSV\n  window._lastRows = { prazo, aprovado, i, rows: Array.from(document.querySelectorAll('#tabela tbody tr')).map(tr=>Array.from(tr.children).map(td=>td.textContent)) };\n}\n\nfunction downloadCSV(){\n  if(!window._lastRows) return;\n  const head = ['Mes','Saldo Inicial','Juros','Amortização','Parcela','Saldo Final'];\n  const lines = [head.join(';')];\n  window._lastRows.rows.forEach(r=> lines.push(r.join(';').replace(/R\\$\\s?/g,'')) );\n  const csv = lines.join('\\n');\n  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});\n  const url = URL.createObjectURL(blob);\n  const a = document.createElement('a');\n  a.href = url; a.download = 'credito_pessoal_price.csv';\n  document.body.appendChild(a); a.click(); a.remove();\n  URL.revokeObjectURL(url);\n}\n<\/script>\n</body>\n\n<script>\n  (function(){\n    function post() {\n      try { parent.postMessage({kind:'resize', id: 'pessoal', h: document.documentElement.scrollHeight+20}, '*'); } catch(e){}\n    }\n    window.addEventListener('load', post);\n    new ResizeObserver(post).observe(document.documentElement);\n    window.addEventListener('resize', post);\n  })();\n<\/script>\n</html>\n"</script>
-  <script id="doc-refi" type="application/json">"<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"utf-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n<title>Simulador — Refinanciamento | Cooperata</title>\n<style>\n  :root{ --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f; --danger:#ff6b6b; --warn:#ffd166; }\n  *{box-sizing:border-box}\n  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}\n  header{padding:28px 18px 8px;text-align:center}\n  header h1{margin:4px 0 6px;font-size:clamp(20px,3.5vw,28px)}\n  header p{margin:0;color:var(--muted)}\n  .wrap{max-width:1100px;margin:18px auto;padding:0 16px 60px}\n  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}\n  @media (max-width:960px){.grid{grid-template-columns:1fr}}\n  .card{background:var(--card);border:1px solid #173244;border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}\n  .card h2{margin:0 0 10px;font-size:18px}\n  fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}\n  fieldset .full{grid-column:1/-1}\n  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}\n  input,select{width:100%;padding:12px;border:1px solid #234458;background:#0a1a24;color:var(--ink);border-radius:10px;font-size:15px;outline:none}\n  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}\n  .results .row{align-items:baseline}\n  .note{font-size:12px;color:var(--muted)}\n  .btn{appearance:none;border:0;background:var(--accent);color:#052213;padding:12px 14px;border-radius:12px;font-weight:700;cursor:pointer}\n  .btn.secondary{background:#0a1a24;color:var(--ink);border:1px solid #214155}\n  .btn:disabled{opacity:.6;cursor:not-allowed}\n  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}\n  th,td{border-bottom:1px solid #163448;padding:10px 8px;text-align:right}\n  th:first-child,td:first-child{text-align:left}\n  tfoot td{font-weight:700}\n  .hr{height:1px;background:#173244;margin:16px 0}\n  .banner{background:#2b0f12;border:1px solid #6e2a33;color:#ffc9c9;padding:10px;border-radius:10px;margin:6px 0;display:none}\n  .ok{background:#0f2b18;border:1px solid #2a6b46;color:#b9f3d3}\n  .dangerText{color:var(--danger);font-weight:700}\n</style>\n</head>\n<body>\n  <header>\n    <h1>Linha de Crédito — <b>Refinanciamento</b></h1>\n    <p>Finalidade: quitar dívidas com juros maiores (bancos/financeiras, cheque especial, cartão etc.)<br>\n       Até <b>2,99% a.m.</b> • Em até <b>24x</b> • Sistema <b>PRICE</b></p>\n  </header>\n\n  <div class=\"wrap\">\n    <div class=\"grid\">\n      <!-- FORM -->\n      <section class=\"card\">\n        <h2>Dados para Simulação</h2>\n        <fieldset>\n          <div>\n            <label>Salário mensal (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"salario\" inputmode=\"decimal\" placeholder=\"ex: 3.000,00\">\n          </div>\n          <div>\n            <label>Tempo como associado (meses)</label>\n            <input type=\"number\" id=\"meses\" min=\"0\" step=\"1\" placeholder=\"ex: 25\">\n          </div>\n\n          <div>\n            <label>Saldo de capital (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"saldoCapital\" inputmode=\"decimal\" value=\"0,00\">\n          </div>\n          <div>\n            <label>Dívidas em andamento (fora do refinanciamento) (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"dividas\" inputmode=\"decimal\" value=\"0,00\">\n          </div>\n\n          <div class=\"full\">\n            <label>Valor a se refinanciar (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"valor\" inputmode=\"decimal\" placeholder=\"ex: 20.000,00\">\n          </div>\n\n          <div>\n            <label>Parcelas do contrato anterior (total)</label>\n            <input type=\"number\" id=\"parcelasTotal\" min=\"1\" step=\"1\" placeholder=\"ex: 24\">\n          </div>\n          <div>\n            <label>Parcelas pagas do contrato anterior</label>\n            <input type=\"number\" id=\"parcelasPagas\" min=\"0\" step=\"1\" placeholder=\"ex: 15\">\n          </div>\n\n          <div>\n            <label>Prazo (meses) — máx. conforme regra</label>\n            <select id=\"prazo\"></select>\n          </div>\n          <div>\n            <label>Taxa de juros (a.m.) — até 2,99%</label>\n            <input type=\"text\" id=\"taxa\" value=\"2,99% a.m.\" disabled>\n          </div>\n\n          <div class=\"full row\" style=\"margin-top:8px\"><button class=\"btn secondary\" id=\"csv\" type=\"button\" disabled>Baixar CSV</button></div>\n\n          <div class=\"full note\">\n            <b>Regras por tempo de associação:</b><br>\n            ≤6m: <b>0,5 salário + saldo</b> (até 5x) •\n            ≤12m: <b>0,7 salário + saldo</b> (até 7x) •\n            ≤18m: <b>1,0 salário + saldo</b> (até 10x) •\n            ≤24m: <b>1,5 salários + saldo</b> (até 15x) •\n            ≥25m: <b>1,5 salários + saldo</b> (até 24x). Abate dívidas em andamento. Crédito sujeito à aprovação.<br>\n            <b>Elegibilidade:</b> é necessário ter pago <b>pelo menos 60%</b> das parcelas do contrato anterior.<br>\n            <b>Avalista:</b> exigido, exceto quando o saldo devedor a refinanciar for menor ou igual ao saldo de capital.\n          </div>\n        </fieldset>\n      </section>\n\n      <!-- RESULT -->\n      <section class=\"card results\" id=\"resultCard\" style=\"display:none\">\n        <h2>Resultado da Simulação</h2>\n        <div id=\"banner\" class=\"banner\"></div>\n        <div class=\"row\" style=\"gap:12px;flex-wrap:wrap;margin-top:8px\">\n          <div><b>Valor solicitado:</b> <span id=\"r_valorSolic\"></span></div>\n          <div><b>Valor aprovado:</b> <span id=\"r_valor\"></span></div>\n          <div><b>Parcela (PRICE):</b> <span id=\"r_parcela\"></span></div>\n          <div><b>Prazo:</b> <span id=\"r_prazo\"></span></div>\n          <div><b>Limite calculado:</b> <span id=\"r_limite\"></span></div>\n          <div><b>Taxa:</b> <span id=\"r_taxa\"></span></div>\n          <div><b>Avalista:</b> <span id=\"r_avalista\"></span></div>\n        </div>\n\n        <div class=\"hr\"></div>\n        <details open>\n          <summary style=\"cursor:pointer\">Ver tabela de amortização</summary>\n          <div style=\"overflow:auto;max-height:420px\">\n            <table id=\"tabela\">\n              <thead><tr><th>Mês</th><th>Saldo Inicial</th><th>Juros</th><th>Amortização</th><th>Parcela</th><th>Saldo Final</th></tr></thead>\n              <tbody></tbody>\n              <tfoot><tr><td>Total</td><td></td><td id=\"totJuros\"></td><td id=\"totAmort\"></td><td id=\"totParcelas\"></td><td></td></tr></tfoot>\n            </table>\n          </div>\n        </details>\n\n        <p class=\"note\" style=\"margin-top:10px\">\n          *CET aproximado considera apenas juros. Custos/seguros não incluídos. Crédito sujeito à aprovação.<br>\n          Para refinanciar: é necessário ter pago ≥60% das parcelas do contrato anterior. Avalista exigido quando o valor a refinanciar for maior que o saldo de capital.\n        </p>\n      </section>\n    </div>\n  </div>\n\n<script>\n/* === Utils BRL === */\nfunction br(n){return (n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}\nfunction parseBRL(str){ if(!str) return 0; return (parseInt(String(str).replace(/[^\\d]/g,''),10)||0)/100; }\n\nfunction maskMoneyLive(inp){\n  let v = inp.value.replace(/[^\\d]/g,'');\n  if(v==='') v='0';\n  v = (parseInt(v,10)/100).toFixed(2);\n  v = v.replace('.',',');\n  v = v.replace(/\\B(?=(\\d{3})+(?!\\d))/g,'.');\n  const posEnd = v.length;\n  inp.value = v;\n  try{ inp.setSelectionRange(posEnd, posEnd);}catch(e){}\n}\n\nfunction setupMoneyInput(inp){\n  inp.addEventListener('input', function(){ maskMoneyLive(inp); run(); });\n  inp.addEventListener('blur', function(){ maskMoneyLive(inp); });\n  if(!inp.value) inp.value='0,00'; else maskMoneyLive(inp);\n}\n\n/* === PRICE === */\nfunction pricePMT(P,i,n){ if(i===0) return P/n; return P*i/(1-Math.pow(1+i,-n)); }\n\n/* === Regras de limite por tempo === */\nfunction faixaPorMeses(m){\n  if(m<=6)  return {coef:0.5, maxP:5,  label:'até 6 meses'};\n  if(m<=12) return {coef:0.7, maxP:7,  label:'até 12 meses'};\n  if(m<=18) return {coef:1.0, maxP:10, label:'até 18 meses'};\n  if(m<=24) return {coef:1.5, maxP:15, label:'até 24 meses'};\n  return {coef:1.5, maxP:24, label:'acima de 25 meses'};\n}\n\nwindow.addEventListener('DOMContentLoaded', function(){\n  document.querySelectorAll('input.money').forEach(setupMoneyInput);\n  const prazoSel = document.getElementById('prazo');\n  for(let i=1;i<=24;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; prazoSel.appendChild(o); }\n  prazoSel.value = 12;\n\n  ['meses','prazo','parcelasTotal','parcelasPagas'].forEach(id=>{\n    const el = document.getElementById(id);\n    el.addEventListener('input', run);\n    el.addEventListener('change', run);\n  });\n\n  document.getElementById('csv').addEventListener('click', downloadCSV);\n\n  run();\n});\n\nfunction run(){\n  const salario = parseBRL(document.getElementById('salario').value);\n  const meses   = +document.getElementById('meses').value||0;\n  const saldo   = parseBRL(document.getElementById('saldoCapital').value);\n  const dividas = parseBRL(document.getElementById('dividas').value);\n  const valor   = parseBRL(document.getElementById('valor').value);\n  let prazo     = +document.getElementById('prazo').value||12;\n  const total   = +document.getElementById('parcelasTotal').value||0;\n  const pagas   = +document.getElementById('parcelasPagas').value||0;\n\n  const regra   = faixaPorMeses(meses);\n  const limite  = Math.max(0, regra.coef*salario + saldo - dividas);\n\n  // Elegibilidade 60%\n  const percPago = total>0 ? (pagas/total) : 0;\n  const elegivel = total>0 && percPago >= 0.60;\n\n  // Ajustes\n  let msgs=[]; let ajustou=false;\n  let aprovado = Math.min(valor, limite);\n  if(aprovado < valor){ msgs.push('Valor solicitado ajustado ao limite de crédito.'); ajustou=true; }\n  if(prazo > regra.maxP){ prazo = regra.maxP; msgs.push('Prazo ajustado para o máximo permitido por regra.'); ajustou=true; }\n\n  const i = 0.0299; // até 2,99% a.m.\n  const pmt = aprovado>0 && prazo>0 ? pricePMT(aprovado, i, prazo) : 0;\n\n  // CET aproximado (a.m. & a.a.)\n  const cet_am = i;\n  const cet_aa = Math.pow(1+i,12)-1;\n\n  // Avalista\n  const precisaAvalista = aprovado > saldo;\n  const avalistaTxt = precisaAvalista ? 'Exigido' : 'Dispensado';\n\n  // KPIs\n  document.getElementById('r_valorSolic').textContent = br(valor);\n  document.getElementById('r_valor').textContent = br(aprovado);\n  document.getElementById('r_parcela').textContent = br(pmt);\n  document.getElementById('r_prazo').textContent = prazo + ' meses';\n  document.getElementById('r_limite').textContent = br(limite);\n  document.getElementById('r_taxa').textContent = '2,99% a.m.';\n  document.getElementById('r_avalista').textContent = avalistaTxt;\n\n  // Tabela PRICE\n  const tbody = document.querySelector('#tabela tbody');\n  tbody.innerHTML='';\n  let saldoInicial = aprovado, TJ=0, TA=0, TP=0;\n  for(let m=1;m<=prazo;m++){\n    const j = saldoInicial * i;\n    const a = pmt - j;\n    const sf = Math.max(0, saldoInicial - a);\n    TJ += j; TA += a; TP += pmt;\n    const tr = document.createElement('tr');\n    const td = (t)=>{ const e=document.createElement('td'); e.textContent=t; return e; }\n    tr.appendChild(td(m));\n    tr.appendChild(td(br(saldoInicial)));\n    tr.appendChild(td(br(j)));\n    tr.appendChild(td(br(a)));\n    tr.appendChild(td(br(pmt)));\n    tr.appendChild(td(br(sf)));\n    tbody.appendChild(tr);\n    saldoInicial = sf;\n  }\n  document.getElementById('totJuros').textContent = br(TJ);\n  document.getElementById('totAmort').textContent = br(TA);\n  document.getElementById('totParcelas').textContent = br(TP);\n\n  // Mensagens (incompatibilidade e elegibilidade)\n  const banner = document.getElementById('banner');\n  const rendaIncompativel = valor > limite;\n  if(!valor || !prazo){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = 'Preencha os campos para simular. O limite considera sua renda pela regra da faixa e abate dívidas em andamento.';\n  }else if(!elegivel){\n    const faltam = Math.max(0, Math.ceil(0.60*total - pagas));\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Elegibilidade não atendida:</b> você pagou '+(percPago*100).toFixed(0)+'% do contrato anterior. É necessário ≥ 60%. Faltam <b>'+faltam+'</b> parcelas.';\n  }else if(rendaIncompativel){\n    const rendaNecessaria = regra.coef>0 ? Math.max(0, (valor - (saldo - dividas))/regra.coef) : Infinity;\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Renda incompatível para esta solicitação.</b><br>'+\n      'Com seu salário atual, o valor máximo permitido é <b>'+br(limite)+'</b>.'+\n      ' Para solicitar <b>'+br(valor)+'</b>, sua renda mínima deveria ser <b>'+br(rendaNecessaria)+'</b>.';\n  }else if(ajustou){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Ajustes aplicados:</b> ' + msgs.join(' ');\n  }else{\n    banner.style.display='block';\n    banner.classList.add('ok');\n    banner.textContent = 'Simulação dentro das regras: '+regra.label+'. CET aprox: '+(cet_am*100).toFixed(2).replace('.',',')+'% a.m. / '+(cet_aa*100).toFixed(2).replace('.',',')+'% a.a.';\n  }\n\n  document.getElementById('resultCard').style.display='block';\n  document.getElementById('csv').disabled = !(aprovado>0 && prazo>0 && elegivel && !rendaIncompativel);\n\n  // para CSV\n  window._lastRows = { prazo, aprovado, i, rows: Array.from(document.querySelectorAll('#tabela tbody tr')).map(tr=>Array.from(tr.children).map(td=>td.textContent)) };\n}\n\nfunction downloadCSV(){\n  if(!window._lastRows) return;\n  const head = ['Mes','Saldo Inicial','Juros','Amortização','Parcela','Saldo Final'];\n  const lines = [head.join(';')];\n  window._lastRows.rows.forEach(r=> lines.push(r.join(';').replace(/R\\$\\s?/g,'')) );\n  const csv = lines.join('\\n');\n  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});\n  const url = URL.createObjectURL(blob);\n  const a = document.createElement('a');\n  a.href = url; a.download = 'refinanciamento_price.csv';\n  document.body.appendChild(a); a.click(); a.remove();\n  URL.revokeObjectURL(url);\n}\n<\/script>\n</body>\n\n<script>\n  (function(){\n    function post() {\n      try { parent.postMessage({kind:'resize', id: 'refi', h: document.documentElement.scrollHeight+20}, '*'); } catch(e){}\n    }\n    window.addEventListener('load', post);\n    new ResizeObserver(post).observe(document.documentElement);\n    window.addEventListener('resize', post);\n  })();\n<\/script>\n</html>\n"</script>
-  <script id="doc-construcao" type="application/json">"<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"utf-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n<title>Simulador — Crédito Construção | Cooperata</title>\n<style>\n  :root{ --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f; --danger:#ff6b6b; --warn:#ffd166; }\n  *{box-sizing:border-box}\n  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}\n  header{padding:28px 18px 8px;text-align:center}\n  header h1{margin:4px 0 6px;font-size:clamp(20px,3.5vw,28px)}\n  header p{margin:0;color:var(--muted)}\n  .wrap{max-width:1100px;margin:18px auto;padding:0 16px 60px}\n  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}\n  @media (max-width:960px){.grid{grid-template-columns:1fr}}\n  .card{background:var(--card);border:1px solid #173244;border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}\n  .card h2{margin:0 0 10px;font-size:18px}\n  fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}\n  fieldset .full{grid-column:1/-1}\n  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}\n  input,select{width:100%;padding:12px;border:1px solid #234458;background:#0a1a24;color:var(--ink);border-radius:10px;font-size:15px;outline:none}\n  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}\n  .note{font-size:12px;color:var(--muted)}\n  .btn{appearance:none;border:0;background:var(--accent);color:#052213;padding:12px 14px;border-radius:12px;font-weight:700;cursor:pointer}\n  .btn.secondary{background:#0a1a24;color:var(--ink);border:1px solid #214155}\n  .btn:disabled{opacity:.6;cursor:not-allowed}\n  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}\n  th,td{border-bottom:1px solid #163448;padding:10px 8px;text-align:right}\n  th:first-child,td:first-child{text-align:left}\n  tfoot td{font-weight:700}\n  .hr{height:1px;background:#173244;margin:16px 0}\n  .banner{background:#2b0f12;border:1px solid #6e2a33;color:#ffc9c9;padding:10px;border-radius:10px;margin:6px 0;display:none}\n  .ok{background:#0f2b18;border:1px solid #2a6b46;color:#b9f3d3}\n</style>\n</head>\n<body>\n  <header>\n    <h1>Linha de Crédito — <b>Construção</b></h1>\n    <p>Taxa <b>1,99% a.m.</b> • Em até <b>24</b> parcelas • Sistema <b>PRICE</b></p>\n  </header>\n\n  <div class=\"wrap\">\n    <div class=\"grid\">\n      <!-- FORM -->\n      <section class=\"card\">\n        <h2>Dados para Simulação</h2>\n        <fieldset>\n          <div>\n            <label>Salário mensal (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"salario\" inputmode=\"decimal\" placeholder=\"ex: 3.000,00\">\n          </div>\n          <div>\n            <label>Tempo como associado (meses)</label>\n            <input type=\"number\" id=\"meses\" min=\"0\" step=\"1\" placeholder=\"ex: 18\">\n          </div>\n\n          <div>\n            <label>Saldo de capital (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"saldoCapital\" inputmode=\"decimal\" value=\"0,00\">\n          </div>\n          <div>\n            <label>Saldo devedor de outros empréstimos (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"dividas\" inputmode=\"decimal\" value=\"0,00\">\n          </div>\n\n          <div class=\"full\">\n            <label>Valor que deseja solicitar (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"valor\" inputmode=\"decimal\" placeholder=\"ex: 20.000,00\">\n          </div>\n          <div class=\"full\">\n            <label>Entrada (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"entrada\" inputmode=\"decimal\" value=\"1.000,00\">\n          </div>\n\n          <div>\n            <label>Prazo (meses) — máx. conforme regra</label>\n            <select id=\"prazo\"></select>\n          </div>\n          <div>\n            <label>Taxa de juros (a.m.)</label>\n            <input type=\"text\" id=\"taxa\" value=\"1,99% a.m.\" disabled>\n          </div>\n\n          <div class=\"full row\" style=\"margin-top:8px\">\n            <button class=\"btn\" id=\"simular\" type=\"button\">Simular</button>\n            <button class=\"btn secondary\" id=\"csv\" type=\"button\" disabled>Baixar CSV</button>\n          </div>\n\n          <div class=\"full note\">\n            <b>Regras por tempo de associação:</b><br>\n            ≤6m: <b>0,5 salário + saldo</b> (até 5x) •\n            ≤12m: <b>0,7 salário + saldo</b> (até 7x) •\n            ≤18m: <b>1,0 salário + saldo</b> (até 10x) •\n            ≤24m: <b>1,5 salários + saldo</b> (até 15x) •\n            ≥25m: <b>1,5 salários + saldo</b> (até 24x). Abate dívidas em andamento. Crédito sujeito à aprovação.\n          </div>\n        </fieldset>\n      </section>\n\n      <!-- RESULT -->\n      <section class=\"card\" id=\"resultCard\" style=\"display:none\">\n        <h2>Resultado da Simulação</h2>\n        <div id=\"banner\" class=\"banner\"></div>\n        <div class=\"row\" style=\"gap:12px;flex-wrap:wrap;margin-top:8px\">\n          <div><b>Entrada aplicada:</b> <span id=\"r_entrada\"></span></div>\n          <div><b>Valor líquido:</b> <span id=\"r_liquido\"></span></div>\n          <div><b>Valor liberado:</b> <span id=\"r_valor\"></span></div>\n          <div><b>Parcela (PRICE):</b> <span id=\"r_parcela\"></span></div>\n          <div><b>Prazo:</b> <span id=\"r_prazo\"></span></div>\n          <div><b>Limite calculado:</b> <span id=\"r_limite\"></span></div>\n          <div><b>Taxa:</b> <span id=\"r_taxa\"></span></div>\n        </div>\n\n        <div class=\"hr\"></div>\n        <details open>\n          <summary style=\"cursor:pointer\">Ver tabela de amortização</summary>\n          <div style=\"overflow:auto;max-height:420px\">\n            <table id=\"tabela\">\n              <thead><tr><th>Mês</th><th>Saldo Inicial</th><th>Juros</th><th>Amortização</th><th>Parcela</th><th>Saldo Final</th></tr></thead>\n              <tbody></tbody>\n              <tfoot><tr><td>Total</td><td></td><td id=\"totJuros\"></td><td id=\"totAmort\"></td><td id=\"totParcelas\"></td><td></td></tr></tfoot>\n            </table>\n          </div>\n        </details>\n\n        <p class=\"note\" style=\"margin-top:10px\">\n          *CET aproximado considera apenas juros. Custos/seguros não incluídos. Solicitação via RH com docs (até 90 dias anteriores). Investimento deve ser comprovado (não aceitamos recibos). Valores acima do saldo de capital podem exigir avalista (sujeito à análise).\n        </p>\n      </section>\n    </div>\n  </div>\n\n<script>\n/* === Utils BRL === */\nfunction br(n){return (n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}\nfunction parseBRL(str){ if(!str) return 0; return (parseInt(String(str).replace(/[^\\d]/g,''),10)||0)/100; }\n\nfunction maskMoneyLive(inp){\n  // formato ao digitar (conforto), caret no fim (simples e estável)\n  let v = inp.value.replace(/[^\\d]/g,'');\n  if(v==='') v='0';\n  v = (parseInt(v,10)/100).toFixed(2);\n  v = v.replace('.',',');\n  v = v.replace(/\\B(?=(\\d{3})+(?!\\d))/g,'.');\n  const posEnd = v.length;\n  inp.value = v;\n  try{ inp.setSelectionRange(posEnd, posEnd);}catch(e){}\n}\n\nfunction setupMoneyInput(inp){\n  inp.addEventListener('input', function(){ maskMoneyLive(inp); run(); });\n  inp.addEventListener('blur', function(){ maskMoneyLive(inp); });\n  if(!inp.value) inp.value='0,00'; else maskMoneyLive(inp);\n}\n\n/* === PRICE === */\nfunction pricePMT(P,i,n){ if(i===0) return P/n; return P*i/(1-Math.pow(1+i,-n)); }\n\n/* === Regras de limite por tempo === */\nfunction faixaPorMeses(m){\n  if(m<=6)  return {coef:0.5, maxP:5,  label:'até 6 meses'};\n  if(m<=12) return {coef:0.7, maxP:7,  label:'até 12 meses'};\n  if(m<=18) return {coef:1.0, maxP:10, label:'até 18 meses'};\n  if(m<=24) return {coef:1.5, maxP:15, label:'até 24 meses'};\n  return {coef:1.5, maxP:24, label:'acima de 25 meses'};\n}\n\nwindow.addEventListener('DOMContentLoaded', function(){\n  // máscara e listeners\n  document.querySelectorAll('input.money').forEach(setupMoneyInput);\n\n  // preencher combo de prazo (1..24)\n  const prazoSel = document.getElementById('prazo');\n  for(let i=1;i<=24;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; prazoSel.appendChild(o); }\n  prazoSel.value = 12;\n\n  // listeners para recalcular em tempo real\n  ['meses','prazo'].forEach(id=>{\n    const el = document.getElementById(id);\n    el.addEventListener('input', run);\n    el.addEventListener('change', run);\n  });\n\n  document.getElementById('simular').addEventListener('click', run);\n  document.getElementById('csv').addEventListener('click', downloadCSV);\n\n  // primeira rodada\n  run();\n});\n\nfunction run(){\n  const salario = parseBRL(document.getElementById('salario').value);\n  const meses   = +document.getElementById('meses').value||0;\n  const saldo   = parseBRL(document.getElementById('saldoCapital').value);\n  const dividas = parseBRL(document.getElementById('dividas').value);\n  const valor   = parseBRL(document.getElementById('valor').value);\n  const entrada = parseBRL(document.getElementById('entrada').value);\n  let prazo     = +document.getElementById('prazo').value||12;\n\n  const regra   = faixaPorMeses(meses);\n  const limite  = Math.max(0, regra.coef*salario + saldo - dividas);\n\n  // Entrada e ajustes\n  let msgs=[]; let ajustou=false;\n  const liquido = Math.max(0, valor - entrada);\n  let aprovado = Math.min(liquido, limite);\n  if(aprovado < liquido){ msgs.push('Valor solicitado ajustado ao limite de crédito.'); ajustou=true; }\n  if(prazo > regra.maxP){ prazo = regra.maxP; msgs.push('Prazo ajustado para o máximo permitido por regra.'); ajustou=true; }\n\n  // Incompatibilidade de renda: quando o valor líquido excede o limite calculado pelo salário atual\n  const rendaNecessaria = regra.coef > 0 ? Math.max(0, (liquido - (saldo - dividas)) / regra.coef) : Infinity;\n  const rendaIncompativel = liquido > limite;\n\n  const i = 0.0199; // 1,99% a.m.\n  const pmt = aprovado>0 && prazo>0 ? pricePMT(aprovado, i, prazo) : 0;\n\n  // KPIs\n  document.getElementById('r_entrada').textContent = br(entrada);\n  document.getElementById('r_liquido').textContent = br(liquido);\n  document.getElementById('r_valor').textContent = br(aprovado);\n  document.getElementById('r_parcela').textContent = br(pmt);\n  document.getElementById('r_prazo').textContent = prazo + ' meses';\n  document.getElementById('r_limite').textContent = br(limite);\n  document.getElementById('r_taxa').textContent = '1,99% a.m.';\n\n  // tabela PRICE\n  const tbody = document.querySelector('#tabela tbody');\n  tbody.innerHTML='';\n  let saldoInicial = aprovado, TJ=0, TA=0, TP=0;\n  for(let m=1;m<=prazo;m++){\n    const j = saldoInicial * i;\n    const a = pmt - j;\n    const sf = Math.max(0, saldoInicial - a);\n    TJ += j; TA += a; TP += pmt;\n    const tr = document.createElement('tr');\n    const td = (t)=>{ const e=document.createElement('td'); e.textContent=t; return e; }\n    tr.appendChild(td(m));\n    tr.appendChild(td(br(saldoInicial)));\n    tr.appendChild(td(br(j)));\n    tr.appendChild(td(br(a)));\n    tr.appendChild(td(br(pmt)));\n    tr.appendChild(td(br(sf)));\n    tbody.appendChild(tr);\n    saldoInicial = sf;\n  }\n  document.getElementById('totJuros').textContent = br(TJ);\n  document.getElementById('totAmort').textContent = br(TA);\n  document.getElementById('totParcelas').textContent = br(TP);\n\n  const banner = document.getElementById('banner');\n  if(aprovado<=0 || prazo<=0){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = 'Preencha os campos para simular. A entrada é aplicada sobre o valor solicitado.';\n  }else if(rendaIncompativel){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Renda incompatível para esta solicitação.</b><br>'+\n      'Com seu salário atual, o valor máximo permitido é <b>'+br(limite)+'</b>.'+\n      ' Para solicitar <b>'+br(liquido)+'</b>, sua renda mínima deveria ser <b>'+br(rendaNecessaria)+'</b>.';\n  }else if(ajustou){\n    banner.style.display='block';\n    banner.classList.remove('ok');\n    banner.innerHTML = '<b>Ajustes aplicados:</b> ' + msgs.join(' ');\n  }else{\n    banner.style.display='block';\n    banner.classList.add('ok');\n    banner.textContent = 'Simulação dentro das regras: ' + regra.label + '.';\n  }\n\n  document.getElementById('resultCard').style.display='block';\n  document.getElementById('csv').disabled = !(aprovado>0 && prazo>0);\n\n  // guardar para CSV\n  window._lastRows = { prazo, aprovado, i, rows: Array.from(document.querySelectorAll('#tabela tbody tr')).map(tr=>Array.from(tr.children).map(td=>td.textContent)) };\n}\n\nfunction downloadCSV(){\n  if(!window._lastRows) return;\n  const head = ['Mes','Saldo Inicial','Juros','Amortização','Parcela','Saldo Final'];\n  const lines = ['Entrada;Valor Líquido;Aprovado;Prazo;Taxa', \n                 document.getElementById('r_entrada').textContent.replace(/R\\$\\s?/g,'')+';'+\n                 document.getElementById('r_liquido').textContent.replace(/R\\$\\s?/g,'')+';'+\n                 document.getElementById('r_valor').textContent.replace(/R\\$\\s?/g,'')+';'+\n                 document.getElementById('r_prazo').textContent+';1,99% a.m.',\n                 head.join(';')];\n  window._lastRows.rows.forEach(r=> lines.push(r.join(';').replace(/R\\$\\s?/g,'')) );\n  const csv = lines.join('\\n');\n  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});\n  const url = URL.createObjectURL(blob);\n  const a = document.createElement('a');\n  a.href = url; a.download = 'construcao_price.csv';\n  document.body.appendChild(a); a.click(); a.remove();\n  URL.revokeObjectURL(url);\n}\n<\/script>\n</body>\n\n<script>\n  (function(){\n    function post() {\n      try { parent.postMessage({kind:'resize', id: 'construcao', h: document.documentElement.scrollHeight+20}, '*'); } catch(e){}\n    }\n    window.addEventListener('load', post);\n    new ResizeObserver(post).observe(document.documentElement);\n    window.addEventListener('resize', post);\n  })();\n<\/script>\n</html>\n"</script>
-  <script id="doc-carro" type="application/json">"<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"utf-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n<title>Simulador de Financiamento — Cooperata</title>\n<style>\n  :root{\n    --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f;\n    --accent-2:#58a6ff; --danger:#ff6b6b; --warn:#ffd166;\n  }\n  *{box-sizing:border-box}\n  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial;\n       color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}\n  header{padding:28px 18px 8px;text-align:center}\n  header h1{margin:4px 0 6px;font-size:clamp(20px,3.5vw,28px);letter-spacing:.2px}\n  header p{margin:0;color:var(--muted)}\n  .wrap{max-width:1100px;margin:18px auto;padding:0 16px 60px}\n  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}\n  @media (max-width:960px){.grid{grid-template-columns:1fr}}\n  .card{background:var(--card);border:1px solid #173244;border-radius:16px;padding:18px;\n        box-shadow:0 10px 30px rgba(0,0,0,.25)}\n  .card h2{margin:0 0 10px;font-size:18px}\n  fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}\n  fieldset .full{grid-column:1/-1}\n  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}\n  input,select{width:100%;padding:12px 12px;border:1px solid #234458;background:#0a1a24;\n               color:var(--ink);border-radius:10px;font-size:15px;outline:none}\n  .money{font-variant-numeric:tabular-nums}\n  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}\n  .note{font-size:12px;color:var(--muted)}\n  .pill{display:inline-flex;align-items:center;gap:8px;background:#0b1f2b;\n        border:1px solid #1c3c4f;padding:8px 10px;border-radius:999px;font-size:12px}\n  .btn{appearance:none;border:0;background:var(--accent);color:#052213;padding:12px 14px;\n       border-radius:12px;font-weight:700;cursor:pointer}\n  .btn.secondary{background:#0a1a24;color:var(--ink);border:1px solid #214155}\n  .btn:disabled{opacity:.6;cursor:not-allowed}\n  .warn{color:var(--warn)}\n  .danger{color:var(--danger)}\n  .results h3{margin:0 0 10px}\n  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}\n  @media (max-width:720px){.kpis{grid-template-columns:1fr 1fr}}\n  .kpi{background:#0a1a24;border:1px solid #193244;border-radius:14px;padding:12px}\n  .kpi .label{font-size:12px;color:var(--muted)}\n  .kpi .val{font-size:20px;font-weight:800;margin-top:6px}\n  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}\n  th,td{border-bottom:1px solid #163448;padding:10px 8px;text-align:right}\n  th:first-child,td:first-child{text-align:left}\n  tfoot td{font-weight:700}\n  details{margin-top:12px}\n  .legend{font-size:12px;color:var(--muted)}\n  .badge{padding:2px 8px;border-radius:999px;border:1px solid #2b6e45;background:#0d281a;color:#9df0c3;font-size:12px}\n  .hr{height:1px;background:#173244;margin:16px 0}\n  .doclist{columns:2;column-gap:24px}\n  .doclist li{break-inside:avoid}\n\n  /* Modal de compatibilidade de renda */\n  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}\n  .modal{background:#0f2330;border:1px solid #1f3d4f;border-radius:16px;max-width:620px;width:92%;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.5)}\n  .modal h3{margin:0 0 10px}\n  .modal p{margin:6px 0;color:var(--muted)}\n  .modal .kpis{grid-template-columns:1fr 1fr}\n  .modal .btnrow{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}\n\n\n  .val.alert{color:var(--danger)!important;font-weight:900}\n  .kpi.alert{border-color:var(--danger)!important}\n\n  .error{color:var(--danger)!important}\n  .banner{background:#2b0f12;border:1px solid #6e2a33;color:#ffc9c9;padding:10px;border-radius:10px;margin:6px 0}\n  .banner b{color:#ffe3e3}\n\n</style>\n</head>\n<body>\n  <header>\n    <h1>Simulador de Financiamento de Veículo — Cooperata</h1>\n    <p>Parcelas fixas (PRICE). Crédito sujeito à análise. Veículo alienado até o término.</p>\n  </header>\n\n  \n  <div class=\"modal-backdrop\" id=\"compatBackdrop\">\n    <div class=\"modal\">\n      <h3>Compatibilidade de renda</h3>\n      <p>As parcelas projetadas <b>excedem 20% do seu salário</b> (regra de comprometimento).</p>\n      <div class=\"kpis\" style=\"margin-top:6px\">\n        <div class=\"kpi\"><div class=\"label\">Parcela simulada</div><div class=\"val\" id=\"m_parcela\"></div></div>\n        <div class=\"kpi\"><div class=\"label\">Limite (20% do salário)</div><div class=\"val\" id=\"m_limiteParcela\"></div></div>\n        <div class=\"kpi\"><div class=\"label\">Salário mínimo p/ essa compra</div><div class=\"val\" id=\"m_salarioMin\"></div></div>\n        <div class=\"kpi\"><div class=\"label\">Valor máximo do veículo (pela renda)</div><div class=\"val\" id=\"m_veiculoMax\"></div></div>\n      </div>\n      <p class=\"note\">Cálculo do valor máximo considera a mesma taxa, prazo e percentual financiado desta simulação.</p>\n      <div class=\"btnrow\">\n        <button class=\"btn secondary\" id=\"m_close\">Fechar</button>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"wrap\">\n    <div class=\"grid\">\n      <!-- LADO ESQUERDO: FORM -->\n      <section class=\"card\">\n        <h2>Dados para Simulação</h2>\n        <fieldset>\n          <div class=\"full\">\n            <label>Valor FIPE do veículo (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"fipe\" inputmode=\"numeric\" placeholder=\"ex: 75.000,00\" value=\"\">\n          </div>\n\n          <div>\n            <label>Tempo como associado (meses)</label>\n            <input type=\"number\" id=\"mesesCoop\" min=\"0\" step=\"1\" placeholder=\"ex: 30\">\n          </div>\n          \n          <div>\n            <label>Ano do veículo</label>\n            <input type=\"number\" id=\"anoVeiculo\" step=\"1\" placeholder=\"ex: 2018\">\n            <span class=\"note\" id=\"anoHint\"></span>\n          </div>\n\n          <div>\n            <label>Salário mensal (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"salario\" inputmode=\"numeric\" placeholder=\"ex: 3.000,00\" value=\"\">\n          </div>\n\n          <div>\n            <label>Saldo de capital (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"saldoCapital\" inputmode=\"numeric\" value=\"0,00\">\n          </div>\n          <div>\n            <label>Saldo devedor de outros empréstimos (R$)</label>\n            <input type=\"text\" class=\"money\" id=\"dividas\" inputmode=\"numeric\" value=\"0,00\">\n          </div>\n\n          <div>\n            <label>Percentual que deseja financiar (%) — máx. 80%</label>\n            <input type=\"number\" id=\"pctDesejado\" min=\"10\" max=\"80\" step=\"5\" value=\"80\">\n          </div>\n          <div>\n            <label>Prazo (meses)</label>\n            <select id=\"prazo\">\n              <option>12</option><option>18</option><option selected>24</option>\n              <option>30</option><option>36</option><option>48</option>\n            </select>\n          </div>\n\n          <div>\n            <label>Carência (meses) — até 24</label>\n            <input type=\"number\" id=\"carencia\" min=\"0\" max=\"24\" step=\"1\" value=\"0\">\n          </div>\n          <div>\n            <label>Juros durante a carência</label>\n            <select id=\"carenciaTipo\">\n              <option value=\"capitaliza\" selected>Capitalizar (aumenta o saldo)</option>\n              <option value=\"somenteJuros\">Pagar somente juros mensalmente</option>\n              <option value=\"isenta\">Sem cobrança na carência (simulação)</option>\n            </select>\n          </div>\n\n          <div class=\"full\">\n            <label>Taxa de juros (a.m.)</label>\n            <div class=\"row\">\n              <input type=\"number\" id=\"taxa\" min=\"1.5\" max=\"3.5\" step=\"0.01\" style=\"max-width:220px\" placeholder=\"ex: 1,70\">\n              <button class=\"btn secondary\" id=\"btnAutoTaxa\" type=\"button\">Auto pela Tabela</button>\n              <span class=\"note\">Tabela Cooperata 1,50%–1,70% a.m. (mín. comercial: 1,70% a.m.)</span>\n            </div>\n          </div>\n\n          <div class=\"full row\" style=\"margin-top:8px\">\n            <button class=\"btn\" id=\"simular\" type=\"button\">Simular</button>\n            <button class=\"btn secondary\" id=\"csv\" type=\"button\" disabled>Baixar CSV</button>\n            <span class=\"pill\"><b>Regra:</b> até <b>80%</b> da FIPE e no máximo <b>48</b> parcelas\n              <span class=\"badge\">mín. 24 contribuições de capital</span>\n            </span>\n          </div>\n\n          <div class=\"full note\">\n            <span class=\"warn\">Atenção:</span> acima de 24 meses na cooperativa: até 80% da FIPE em até 48 parcelas,\n            limitado a <b>5 salários + saldo de capital</b>. Será abatido saldo devedor de outros empréstimos.\n          </div>\n        </fieldset>\n      </section>\n\n      <!-- LADO DIREITO: RESULTADOS -->\n      <section class=\"card results\" id=\"results\" style=\"display:none\">\n        <h2>Resultado da Simulação</h2>\n        <div id=\"incomeBanner\" class=\"banner\" style=\"display:none\"></div>\n        <div id=\"alerts\"></div>\n        <div class=\"kpis\" style=\"margin-top:10px\">\n          <div class=\"kpi\"><div class=\"label\">Valor financiado</div><div class=\"val\" id=\"k_valorFin\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">Taxa (a.m.)</div><div class=\"val\" id=\"k_taxa\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">Parcela (PRICE)</div><div class=\"val\" id=\"k_parcela\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">Prazo</div><div class=\"val\" id=\"k_prazo\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">Carência</div><div class=\"val\" id=\"k_carencia\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">Renda mínima requerida</div><div class=\"val\" id=\"k_rendaMin\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">CET aproximado*</div><div class=\"val\" id=\"k_cet\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">Entrada requerida</div><div class=\"val\" id=\"k_entrada\"></div></div>\n          <div class=\"kpi\"><div class=\"label\">% da FIPE (entrada)</div><div class=\"val\" id=\"k_entrada_pct\"></div></div>\n        </div>\n\n        <div class=\"hr\"></div>\n        <div class=\"legend\">*CET aproximado considera apenas juros. Custos operacionais/seguros não incluídos.</div>\n\n        <details open>\n          <summary style=\"cursor:pointer;margin-top:8px\">Ver tabela de amortização</summary>\n          <div style=\"overflow:auto;max-height:420px\">\n            <table id=\"tabela\">\n              <thead>\n                <tr>\n                  <th>Mês</th><th>Fase</th><th>Saldo Inicial</th><th>Juros</th><th>Amortização</th><th>Parcela</th><th>Saldo Final</th>\n                </tr>\n              </thead>\n              <tbody></tbody>\n              <tfoot>\n                <tr><td>Total</td><td></td><td></td><td id=\"totJuros\"></td><td id=\"totAmort\"></td><td id=\"totParcelas\"></td><td></td></tr>\n              </tfoot>\n            </table>\n          </div>\n        </details>\n      </section>\n    </div>\n\n    <!-- REGRAS E DOCUMENTOS -->\n    <section class=\"card\" style=\"margin-top:16px\">\n      <h2>Regras, Documentos e Obrigações</h2>\n      <ul class=\"doclist\">\n        <li><b>Carência:</b> até 24 meses; mínimo 24 contribuições de capital.</li>\n        <li><b>Limite:</b> até 80% da FIPE e até 48 prestações; valor limitado a <b>5 salários + saldo de capital</b> (abatendo dívidas em andamento).</li>\n<li><b>Entrada mínima:</b> 20% do valor FIPE. Pode ser <u>maior</u> caso o teto de crédito (5 salários + capital – dívidas) seja inferior a 80% da FIPE.</li>\n        <li><b>Juros:</b> a partir de 1,70% a.m. (consulte política vigente). Tabela operacional 1,50%–1,70% a.m.</li>\n        <li><b>Método PRICE:</b> parcelas mensais fixas.</li>\n        <li><b>Garantia:</b> veículo alienado até o fim do contrato.</li>\n        <li><b>Necessário:</b> CRLV Digital; declaração de ciência de transferência (associado); autorização de alienação (concessionária/terceiro). Outros documentos podem ser solicitados.</li>\n        <li><b>Obrigatório:</b> emitir novo CRV em seu nome e enviar cópia à Cooperata em até 20 dias.</li>\n        <li><b>Seguro:</b> contratação obrigatória (cláusula 1.5). Enviar cópia da apólice em até 20 dias após o crédito.</li>\n        <li><b>Importante:</b> em meses de férias/afastamento, realizar transferência identificada para a conta da Cooperata.</li>\n        <li><b>Crédito:</b> sujeito à aprovação e análise interna.</li>\n      </ul>\n      <p class=\"note\">Esta é uma ferramenta de simulação. Condições reais podem variar após análise.</p>\n    </section>\n  </div>\n\n<script>\n/* ===== Helpers de moeda BR (máscara + parse) ===== */\nfunction formatBRL(n){\n  const fixed = Number(n).toFixed(2);\n  let [int, dec] = fixed.split('.');\n  int = int.replace(/\\B(?=(\\d{3})+(?!\\d))/g,'.');\n  return int + ',' + dec;\n}\nfunction parseBRL(str){\n  if(!str) return 0;\n  const onlyDigits = String(str).replace(/[^\\d]/g,'');\n  return (parseInt(onlyDigits||'0',10)/100);\n}\nfunction maskMoneyInput(e){\n  const el = e.target;\n  const digits = el.value.replace(/[^\\d]/g,'');\n  const n = (parseInt(digits||'0',10)/100).toFixed(2);\n  const [i,d] = n.split('.');\n  el.value = i.replace(/\\B(?=(\\d{3})+(?!\\d))/g,'.') + ',' + d;\n}\n\n['fipe','salario','saldoCapital','dividas'].forEach(id=>{\n  const inp = document.getElementById(id);\n  inp.addEventListener('input', maskMoneyInput);\n  // inicia com 0,00 se vazio\n  if(!inp.value) inp.value = '0,00';\n});\n\n/* --- Tabela de taxas (imagem) --- */\n\n// Configura range dinâmico do ano do veículo (até 10 anos de uso)\n(function(){\n  const y = new Date().getFullYear();\n  const minY = y - 10, maxY = y;\n  const anoInp = document.getElementById('anoVeiculo');\n  if(anoInp){ anoInp.min = String(minY); anoInp.max = String(maxY); }\n  const hint = document.getElementById('anoHint');\n  if(hint){ hint.textContent = 'Aceito: de ' + minY + ' até ' + maxY + ' (máx. 10 anos de uso)'; }\n})();\n\nconst rateTable = {\n  10:{12:1.50,18:1.50,24:1.50,30:1.60,36:1.60,48:1.70},\n  20:{12:1.50,18:1.50,24:1.60,30:1.60,36:1.60,48:1.70},\n  30:{12:1.50,18:1.50,24:1.60,30:1.60,36:1.70,48:1.70},\n  40:{12:1.60,18:1.60,24:1.60,30:1.60,36:1.70,48:1.70},\n  50:{12:1.60,18:1.60,24:1.70,30:1.70,36:1.70,48:1.70},\n  60:{12:1.60,18:1.70,24:1.70,30:1.70,36:1.70,48:1.70},\n  70:{12:1.70,18:1.70,24:1.70,30:1.70,36:1.70,48:1.70},\n  80:{12:1.70,18:1.70,24:1.70,30:1.70,36:1.70,48:1.70}\n};\n\nfunction br(n){return (isNaN(n)?'R$ 0,00':(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}))}\nfunction fmtPct(n){return (n*100).toFixed(2).replace('.',',')+'%'}\nfunction clamp(v,min,max){return Math.max(min,Math.min(max,v))}\n\n/* Sugerir taxa pela tabela considerando % financiado e prazo */\nfunction autoRate(percent, prazoMeses){\n  const p = Math.min(80, Math.max(10, Math.round(percent/10)*10)); // arredonda para bloco de 10\n  let r = (rateTable[p] && rateTable[p][prazoMeses]) ? rateTable[p][prazoMeses] : 1.70;\n  // política: mínimo comercial 1,70% a.m.\n  r = Math.max(1.70, r);\n  return r;\n}\n\n/* PRICE: PMT = P*i/(1-(1+i)^-n) */\nfunction pricePMT(principal, taxaMes, n){\n  const i = taxaMes;\n  if(i === 0) return principal / n;\n  return principal * (i) / (1 - Math.pow(1 + i, -n));\n}\n\n/* Gera amortização incluindo carência */\nfunction gerarTabela({principal, taxaMes, prazo, carencia, modoCarencia}){\n  let rows = [];\n  let saldo = principal;\n  let totalJ=0,totalA=0,totalP=0;\n\n  // Fase de carência\n  for(let m=1;m<=carencia;m++){\n    let jurosCalc = saldo * taxaMes;\n    let juros = 0, amort = 0, parcela = 0;\n\n    if(modoCarencia==='capitaliza'){\n      juros = jurosCalc;\n      saldo += juros;          // incorpora\n      totalJ += juros;         // contabiliza custo\n    }else if(modoCarencia==='somenteJuros'){\n      juros = jurosCalc;\n      parcela = juros;         // paga juros, saldo não muda\n      totalP += parcela;\n      totalJ += juros;\n    }else{ // isenta\n      juros = 0;               // sem cobrança de juros na carência\n    }\n    rows.push({mes:m,label:'Carência',si:saldo - (modoCarencia==='capitaliza'?juros:0),j:juros,a:amort,p:parcela,sf:saldo});\n  }\n\n  // Recalcula PMT sobre saldo após carência\n  const pmt = pricePMT(saldo, taxaMes, prazo);\n  for(let m=1;m<=prazo;m++){\n    const si = saldo;\n    const j = si * taxaMes;\n    const a = pmt - j;\n    saldo = Math.max(0, si - a);\n    totalJ += j; totalA += a; totalP += pmt;\n    rows.push({mes:carencia+m,label:'Amortização',si:si,j:j,a:a,p:pmt,sf:saldo});\n  }\n  return {rows, totals:{juros:totalJ, amort:totalA, parcelas:totalP}};\n}\n\n\n\nfunction toggleError(ids, on){\n  ids.forEach(function(sel){\n    var el = document.querySelector(sel);\n    if(!el) return;\n    if(on){ el.classList.add('error'); } else { el.classList.remove('error'); }\n  });\n}\n\n/* ===== Modal helpers ===== */\nfunction showCompat(data){\n  document.getElementById('m_parcela').textContent = br(data.parcela);\n  document.getElementById('m_limiteParcela').textContent = br(data.limiteParcela);\n  document.getElementById('m_salarioMin').textContent = br(data.salarioMin);\n  document.getElementById('m_veiculoMax').textContent = br(data.veiculoMax);\n  document.getElementById('compatBackdrop').style.display='flex';\n}\nfunction hideCompat(){ document.getElementById('compatBackdrop').style.display='none'; }\ndocument.addEventListener('click', (e)=>{\n  if(e.target && e.target.id==='m_close'){ hideCompat(); }\n  if(e.target && e.target.id==='compatBackdrop'){ hideCompat(); }\n});\n\n/* CSV */\nfunction tabelaToCSV(rows){\n  const head = ['Mes','Fase','Saldo Inicial','Juros','Amortização','Parcela','Saldo Final'];\n  const lines = [head.join(';')];\n  rows.forEach(r=>{\n    lines.push([\n      r.mes, r.label,\n      r.si.toFixed(2).replace('.',','),\n      r.j.toFixed(2).replace('.',','),\n      r.a.toFixed(2).replace('.',','),\n      r.p.toFixed(2).replace('.',','),\n      r.sf.toFixed(2).replace('.',','),\n    ].join(';'))\n  });\n  return lines.join('\\\\n');\n}\n\n/* DOM */\nconst $ = (s)=>document.querySelector(s);\nconst el = (tag,txt)=>{const e=document.createElement(tag); if(txt!==undefined)e.textContent=txt; return e;}\n\nconst inputs = {\n  fipe: $('#fipe'), mesesCoop: $('#mesesCoop'), salario: $('#salario'),\n  saldoCapital: $('#saldoCapital'), dividas: $('#dividas'),\n  pctDesejado: $('#pctDesejado'), prazo: $('#prazo'),\n  carencia: $('#carencia'), carenciaTipo: $('#carenciaTipo'),\n  taxa: $('#taxa')\n};\n\n$('#btnAutoTaxa').addEventListener('click', ()=>{\n  const fipe = parseBRL(inputs.fipe.value||'0');\n  const pct = clamp(+inputs.pctDesejado.value||0,10,80);\n  const prazo = +inputs.prazo.value;\n  const taxa = autoRate(fipe>0?pct:80, prazo);\n  inputs.taxa.value = taxa.toFixed(2);\n});\n\n$('#simular').addEventListener('click', ()=>{\n  try{\n    const msgs = [];\n    const fipe = parseBRL(inputs.fipe.value||'0');\n    const mesesCoop = +inputs.mesesCoop.value||0;\n    const salario = parseBRL(inputs.salario.value||'0');\n    const saldoCapital = parseBRL(inputs.saldoCapital.value||'0');\n    const dividas = parseBRL(inputs.dividas.value||'0');\n    let pct = clamp(+inputs.pctDesejado.value||0,10,80);\n    const prazo = +inputs.prazo.value||24;\n    const carencia = clamp(+inputs.carencia.value||0,0,24);\n    const tipoCar = inputs.carenciaTipo.value||'capitaliza';\n\n    if(!(typeof fipe==='number') || isNaN(fipe)) throw new Error('Valor FIPE inválido.');\n  \n  \n  const anoVeiculo = +document.getElementById('anoVeiculo').value||0;\n  const anoAtual = new Date().getFullYear();\n  const idade = anoAtual - anoVeiculo;\n  let anoOk = true;\n  if(!anoVeiculo || String(anoVeiculo).length!==4 || isNaN(anoVeiculo)){\n    msgs.push('Informe um ano válido no formato AAAA.');\n    anoOk = false;\n  }else if(idade<0){\n    msgs.push('Ano do veículo não pode ser no futuro.');\n    anoOk = false;\n  }else if(idade>10){\n    msgs.push('Veículos com mais de 10 anos de uso não são elegíveis.');\n    anoOk = false;\n  }\n  if(!anoOk){\n    const banner = document.getElementById('incomeBanner');\n    banner.style.display='block';\n    banner.innerHTML = '<b>Ano do veículo incoerente.</b> Informe um ano entre ' + (anoAtual-10) + ' e ' + anoAtual + ' (máx. 10 anos).';\n    document.querySelector('#results').style.display='block';\n    document.getElementById('csv').disabled = true;\n    return; // bloqueia simulação\n  }\n  if(fipe<=0) msgs.push('Informe o valor FIPE do veículo.');\n\n    if(mesesCoop<24) msgs.push('Regra: mínimo 24 meses como associado para condições máximas (80% em até 48 parcelas).');\n    const tetoPolitica = Math.max(0, (salario*5 + saldoCapital) - dividas);\n    if(tetoPolitica<=0) msgs.push('O teto “5 salários + saldo de capital - dívidas” está zerado/negativo.');\n\n    // Valor máximo por regra\n    const maxPorcentagem = 0.80 * fipe;\n    const maxLimite = tetoPolitica;\n    const maxFinanciavel = Math.max(0, Math.min(maxPorcentagem, maxLimite));\n\n    // Valor desejado por percentual\n    let desejado = (pct/100)*fipe;\n    if(desejado>maxFinanciavel){\n      desejado = maxFinanciavel;\n      // recalcula % efetivo\n      pct = fipe>0 ? Math.round((desejado/fipe)*100) : pct;\n      msgs.push('Valor solicitado ajustado ao limite (80% FIPE e/ou 5 salários + saldo de capital, abatendo dívidas).');\n    }\n\n  \n  // Entrada requerida (FIPE - valor financiado)\n  const entrada = Math.max(0, fipe - desejado);\n  const entradaPct = fipe>0 ? (entrada / fipe) : 0;\n\n  // KPIs de entrada\n  document.querySelector('#k_entrada').textContent = br(entrada);\n  document.querySelector('#k_entrada_pct').textContent = (entradaPct*100).toFixed(2).replace('.',',') + '%';\n\n  // Observação explicativa\n  const entradaMin = 0.20 * fipe;\n  if(entrada < entradaMin){\n    msgs.push('Entrada mínima considerada é 20% da FIPE. Ajuste solicitado pode elevar a entrada se o teto de crédito for menor.');\n  }\n\n  // Taxa\n    let taxaMes = parseFloat(String(inputs.taxa.value||'').replace(',', '.'));\n    if(!taxaMes || taxaMes<1.50 || taxaMes>4.0){\n      taxaMes = autoRate(pct, prazo);\n      inputs.taxa.value = taxaMes.toFixed(2);\n    }\n    // mínimo comercial 1,70% a.m.\n    taxaMes = Math.max(taxaMes, 1.70);\n    const i = taxaMes/100;\n\n    // Gera tabela\n    const sim = gerarTabela({\n      principal: desejado,\n      taxaMes: i,\n      prazo,\n      carencia,\n      modoCarencia: tipoCar\n    });\n    const rows = sim.rows, totals = sim.totals;\n\n    // KPIs\n    document.querySelector('#k_valorFin').textContent = br(desejado);\n    document.querySelector('#k_taxa').textContent = (taxaMes.toFixed(2).replace('.',',')) + '% a.m.';\n    // parcela exibida: pega a primeira parcela pós-carência (PRICE) sem optional chaining\n    var firstPrice = 0;\n    for(var idx=0; idx<rows.length; idx++){ if(rows[idx].label==='Amortização'){ firstPrice = rows[idx].p; break; } }\n    document.querySelector('#k_parcela').textContent = br(firstPrice||0);\n    document.querySelector('#k_prazo').textContent = prazo + ' meses';\n    document.querySelector('#k_carencia').textContent = carencia + ' meses';\n    // Renda mínima requerida (parcela/0.20)\n  const rendaMin = firstPrice/0.20;\n  document.querySelector('#k_rendaMin').textContent = br(rendaMin);\n  \n  // Verifica compatibilidade e aplica alerta visual\n  const rendaMinEl = document.querySelector('#k_rendaMin');\n  const parcelaEl = document.querySelector('#k_parcela');\n  if(rendaMin > salario){\n    rendaMinEl.classList.add('alert');\n    parcelaEl.classList.add('alert');\n    document.querySelector('#results').classList.add('alert');\n    msgs.push('Incompatibilidade: sua renda atual é insuficiente para essa simulação. Valores exibidos são apenas ilustrativos.');\n  } else {\n    rendaMinEl.classList.remove('alert');\n    parcelaEl.classList.remove('alert');\n    document.querySelector('#results').classList.remove('alert');\n  }\n\n  // CET aproximado = (1+i)^12 - 1\n    const cet = Math.pow(1+i,12)-1;\n    \n  \n  document.querySelector('#k_cet').textContent = fmtPct(cet);\n\n  // ===== Compatibilidade de renda: pintar em vermelho e exibir banner quando não compatível =====\n  const limiteParcela = salario * 0.20;\n  const incomeOK = firstPrice <= limiteParcela;\n  const banner = document.getElementById('incomeBanner');\n  if(!incomeOK){\n    banner.style.display='block';\n    banner.innerHTML = '<b>Renda não compatível.</b> Estes valores são apenas um <b>exemplo</b> de como ficaria se sua renda fosse adequada. Limite de parcela: ' + br(limiteParcela) + ' — renda mínima para esta compra: ' + br(firstPrice/0.20) + '.';\n    toggleError(['#k_parcela','#k_rendaMin','#k_valorFin','#k_entrada','#k_entrada_pct'], true);\n  }else{\n    banner.style.display='none';\n    banner.textContent='';\n    toggleError(['#k_parcela','#k_rendaMin','#k_valorFin','#k_entrada','#k_entrada_pct'], false);\n  }\n\n\n\n    // Tabela\n    const tbody = document.querySelector('#tabela tbody');\n    tbody.innerHTML = '';\n    rows.forEach(function(r){\n      const tr = el('tr');\n      tr.appendChild(el('td', r.mes));\n      tr.appendChild(el('td', r.si === r.sf && r.p===0 ? 'Carência' : r.label));\n      tr.appendChild(el('td', br(r.si)));\n      tr.appendChild(el('td', br(r.j)));\n      tr.appendChild(el('td', br(r.a)));\n      tr.appendChild(el('td', br(r.p)));\n      tr.appendChild(el('td', br(r.sf)));\n      tbody.appendChild(tr);\n    });\n    document.querySelector('#totJuros').textContent = br(totals.juros);\n    document.querySelector('#totAmort').textContent = br(totals.amort);\n    document.querySelector('#totParcelas').textContent = br(totals.parcelas);\n\n    // Alertas\n    const alerts = document.querySelector('#alerts');\n    alerts.innerHTML = '';\n    if(msgs.length){\n      const ul = el('ul'); ul.style.margin=\"0 0 10px\";\n      msgs.forEach(function(m){ const li = el('li'); li.innerHTML = '<span class=\"warn\">•</span> '+m; ul.appendChild(li); });\n      alerts.appendChild(ul);\n    }\n    document.querySelector('#results').style.display='block';\n    document.querySelector('#csv').disabled = false; // habilita apenas quando válido\n\n    // CSV handler\n    document.querySelector('#csv').onclick = function(){\n      const csv = tabelaToCSV(rows);\n      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});\n      const url = URL.createObjectURL(blob);\n      const a = document.createElement('a');\n      a.href = url; a.download = 'amortizacao_cooperata.csv';\n      document.body.appendChild(a); a.click(); a.remove();\n      URL.revokeObjectURL(url);\n    };\n  }catch(err){\n    const alerts = document.querySelector('#alerts');\n    alerts.innerHTML = '<div class=\"danger\">Erro na simulação: '+ (err && err.message ? err.message : String(err)) +'</div>';\n    document.querySelector('#results').style.display='block';\n  }\n});\n\ndocument.getElementById('csv').addEventListener('click', ()=>{\n  if(window._lastRows){\n    const csv = tabelaToCSV(window._lastRows);\n    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});\n    const url = URL.createObjectURL(blob);\n    const a = document.createElement('a');\n    a.href = url; a.download = 'amortizacao_cooperata.csv';\n    document.body.appendChild(a); a.click(); a.remove();\n    URL.revokeObjectURL(url);\n  }\n});\n<\/script>\n</body>\n\n<script>\n  (function(){\n    function post() {\n      try { parent.postMessage({kind:'resize', id: 'carro', h: document.documentElement.scrollHeight+20}, '*'); } catch(e){}\n    }\n    window.addEventListener('load', post);\n    new ResizeObserver(post).observe(document.documentElement);\n    window.addEventListener('resize', post);\n  })();\n<\/script>\n</html>\n"</script>
-
-  <script>
-    function getDoc(id){ try{ return JSON.parse(document.getElementById('doc-'+id).textContent); }catch(e){ return '<!DOCTYPE html><html><body><h2>Falha ao carregar '+id+'</h2></body></html>'; } }
-    const frame=document.getElementById('frame'),cards=document.getElementById('cards'),panel=document.getElementById('panel');
-    function openSim(id){ frame.srcdoc=getDoc(id); cards.style.display='none'; panel.style.display='block'; setTimeout(()=>{ try{ frame.contentWindow.postMessage({kind:'req-resize'}, '*'); }catch(e){} }, 150); }
-    function back(){ panel.style.display='none'; cards.style.display='block'; frame.srcdoc=''; }
-    document.querySelectorAll('[data-open]').forEach(c=>c.addEventListener('click',()=>openSim(c.dataset.open)));
-    document.getElementById('voltar').addEventListener('click', back);
-    window.addEventListener('message', ev=>{ const d=ev.data||{}; if(d.kind==='resize') frame.style.height=Math.max(700,d.h||0)+'px'; });
-    
-  </script>
-  <script defer src="./sw-reg.js"></script>
-  </body>
-  </html>
+  <footer>Obs.: o arquivo do carro possui espaço no nome. O link usa %20 para funcionar em navegadores.</footer>
+</body>
+</html>
