@@ -36,6 +36,27 @@
 </style>
 </head>
 <body>
+  <!-- Barra de retorno ao Index -->
+<style>
+  .topbar{
+    position:sticky; top:0; z-index:999;
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px;
+    background:#0f2330; border-bottom:1px solid #173244; color:#e8f1f7;
+  }
+  .back-btn{
+    padding:8px 12px; border-radius:10px; border:1px solid #173244;
+    background:#122b3a; color:#e8f1f7; cursor:pointer;
+  }
+  .back-btn:hover{transform:translateY(-1px)}
+</style>
+
+<div class="topbar">
+  <button class="back-btn" type="button"
+    onclick="window.location.href='index-linhas-de-credito.html'">← Voltar ao Index</button>
+  <strong style="margin-left:4px">Simulador</strong>
+</div>
+
   <header>
     <h1>Linha de Crédito — <b>Pessoal</b></h1>
     <p>Finalidade: empréstimo para qualquer finalidade. Se houver saldo devedor atual, avaliar a linha de <b>Refinanciamento</b>.<br>

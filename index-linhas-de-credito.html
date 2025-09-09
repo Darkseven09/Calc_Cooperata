@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linhas de Crédito — Cooperata</title>
+<style>
+  :root{
+    --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f;
+    --accent-2:#58a6ff; --danger:#ff6b6b; --shadow:rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+    color:var(--ink);
+    background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)
+  }
+  header{padding:28px 18px 8px;text-align:center}
+  h1{margin:4px 0 6px;font-size:clamp(22px,3.8vw,34px);letter-spacing:.2px}
+  p{margin:0;color:var(--muted)}
+  .wrap{max-width:980px;margin:24px auto;padding:0 16px 60px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(260px,1fr));
+    gap:18px;
+    justify-items:stretch
+  }
+  @media (max-width:720px){.grid{grid-template-columns:1fr}}
+
+  /* Botões como cards */
+  button.card{
+    display:flex;gap:16px;align-items:center;
+    width:100%;
+    padding:18px;border-radius:16px;
+    background:var(--card);border:1px solid #173244;
+    color:var(--ink);
+    box-shadow:0 10px 30px var(--shadow);
+    transition:transform .08s ease, border-color .12s ease;
+    cursor:pointer;text-align:left
+  }
+  button.card:hover{transform:translateY(-2px);border-color:#2c5770}
+  button.card:focus{outline:2px solid var(--accent-2);outline-offset:2px}
+  button.card .icon{font-size:42px;line-height:1}
+  .title{font-size:20px;font-weight:800;margin-bottom:4px}
+  .desc{font-size:13px;color:var(--muted)}
+  footer{
+    max-width:980px;margin:18px auto 40px;padding:0 16px;
+    color:var(--muted);font-size:12px;text-align:center
+  }
+
+  /* reset básico p/ button herdar tipografia */
+  button{font:inherit;background:none}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Linhas de Crédito</h1>
+    <p>Escolha a linha para abrir o simulador em outra aba.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <button class="card" type="button" data-href="simulador-pessoal.html" aria-label="Abrir simulador de Crédito Pessoal">
+        <div class="icon">🛩️</div>
+        <div>
+          <div class="title">Linha de Crédito — Pessoal</div>
+          <div class="desc">Empréstimo para qualquer finalidade. Até 1,99% a.m. • até 24x • PRICE.</div>
+        </div>
+      </button>
+
+      <button class="card" type="button" data-href="simulador-refinanciamento.html" aria-label="Abrir simulador de Refinanciamento">
+        <div class="icon">💱</div>
+        <div>
+          <div class="title">Linha de Crédito — Refinanciamento</div>
+          <div class="desc">Quitar dívidas mais caras. Até 2,99% a.m. • até 24x • PRICE.</div>
+        </div>
+      </button>
+
+      <button class="card" type="button" data-href="simulador-construcao.html" aria-label="Abrir simulador de Construção">
+        <div class="icon">🛠️</div>
+        <div>
+          <div class="title">Linha de Crédito — Construção</div>
+          <div class="desc">Reforma/Construção/Compra de imóvel. 1,99% a.m. • até 24x • PRICE.</div>
+        </div>
+      </button>
+
+      <button class="card" type="button" data-href="simulador-Financiamento-carro.html" aria-label="Abrir simulador de Carro">
+        <div class="icon">🚗</div>
+        <div>
+          <div class="title">Linha de Crédito — Carro</div>
+          <div class="desc">Financiamento de veículo (FIPE). 1,70% a.m. • até 48x • PRICE.</div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <footer>Obs.: o arquivo do carro possui espaço no nome. O link usa %20 para funcionar em navegadores.</footer>
+
+  <script>
+    // Abre cada simulador em nova aba/janela com segurança (noopener/noreferrer)
+    document.querySelectorAll('button.card').forEach((btn)=>{
+      btn.addEventListener('click', ()=>{
+        const url = btn.dataset.href;
+        const w = window.open(url, '_blank', 'noopener,noreferrer');
+        if (w) w.opener = null; // hardening extra
+      });
+    });
+  </script>
+</body>
+</html>

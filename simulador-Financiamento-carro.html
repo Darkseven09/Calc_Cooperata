@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simulador de Financiamento — Cooperata</title>
+<style>
+  :root{
+    --bg:#0b1720; --card:#0f2330; --ink:#e8f1f7; --muted:#a6c0d0; --accent:#3bd17f;
+    --accent-2:#58a6ff; --danger:#ff6b6b; --warn:#ffd166;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial;
+       color:var(--ink);background:linear-gradient(180deg,#071119,#0b1720 30%,#08121a)}
+  header{padding:28px 18px 8px;text-align:center}
+  header h1{margin:4px 0 6px;font-size:clamp(20px,3.5vw,28px);letter-spacing:.2px}
+  header p{margin:0;color:var(--muted)}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 16px 60px}
+  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media (max-width:960px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid #173244;border-radius:16px;padding:18px;
+        box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .card h2{margin:0 0 10px;font-size:18px}
+  fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  fieldset .full{grid-column:1/-1}
+  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+  input,select{width:100%;padding:12px 12px;border:1px solid #234458;background:#0a1a24;
+               color:var(--ink);border-radius:10px;font-size:15px;outline:none}
+  .money{font-variant-numeric:tabular-nums}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .note{font-size:12px;color:var(--muted)}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:#0b1f2b;
+        border:1px solid #1c3c4f;padding:8px 10px;border-radius:999px;font-size:12px}
+  .btn{appearance:none;border:0;background:var(--accent);color:#052213;padding:12px 14px;
+       border-radius:12px;font-weight:700;cursor:pointer}
+  .btn.secondary{background:#0a1a24;color:var(--ink);border:1px solid #214155}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .warn{color:var(--warn)}
+  .danger{color:var(--danger)}
+  .results h3{margin:0 0 10px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:720px){.kpis{grid-template-columns:1fr 1fr}}
+  .kpi{background:#0a1a24;border:1px solid #193244;border-radius:14px;padding:12px}
+  .kpi .label{font-size:12px;color:var(--muted)}
+  .kpi .val{font-size:20px;font-weight:800;margin-top:6px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+  th,td{border-bottom:1px solid #163448;padding:10px 8px;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  tfoot td{font-weight:700}
+  details{margin-top:12px}
+  .legend{font-size:12px;color:var(--muted)}
+  .badge{padding:2px 8px;border-radius:999px;border:1px solid #2b6e45;background:#0d281a;color:#9df0c3;font-size:12px}
+  .hr{height:1px;background:#173244;margin:16px 0}
+  .doclist{columns:2;column-gap:24px}
+  .doclist li{break-inside:avoid}
+
+  /* Modal de compatibilidade de renda */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}
+  .modal{background:#0f2330;border:1px solid #1f3d4f;border-radius:16px;max-width:620px;width:92%;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .modal h3{margin:0 0 10px}
+  .modal p{margin:6px 0;color:var(--muted)}
+  .modal .kpis{grid-template-columns:1fr 1fr}
+  .modal .btnrow{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+
+
+  .val.alert{color:var(--danger)!important;font-weight:900}
+  .kpi.alert{border-color:var(--danger)!important}
+
+  .error{color:var(--danger)!important}
+  .banner{background:#2b0f12;border:1px solid #6e2a33;color:#ffc9c9;padding:10px;border-radius:10px;margin:6px 0}
+  .banner b{color:#ffe3e3}
+
+</style>
+</head>
+<body>
+  <!-- Barra de retorno ao Index -->
+<style>
+  .topbar{
+    position:sticky; top:0; z-index:999;
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px;
+    background:#0f2330; border-bottom:1px solid #173244; color:#e8f1f7;
+  }
+  .back-btn{
+    padding:8px 12px; border-radius:10px; border:1px solid #173244;
+    background:#122b3a; color:#e8f1f7; cursor:pointer;
+  }
+  .back-btn:hover{transform:translateY(-1px)}
+</style>
+
+<div class="topbar">
+  <button class="back-btn" type="button"
+    onclick="window.location.href='index-linhas-de-credito.html'">← Voltar ao Index</button>
+  <strong style="margin-left:4px">Simulador</strong>
+</div>
+
+  <header>
+    <h1>Simulador de Financiamento de Veículo — Cooperata</h1>
+    <p>Parcelas fixas (PRICE). Crédito sujeito à análise. Veículo alienado até o término.</p>
+  </header>
+
+  
+  <div class="modal-backdrop" id="compatBackdrop">
+    <div class="modal">
+      <h3>Compatibilidade de renda</h3>
+      <p>As parcelas projetadas <b>excedem 20% do seu salário</b> (regra de comprometimento).</p>
+      <div class="kpis" style="margin-top:6px">
+        <div class="kpi"><div class="label">Parcela simulada</div><div class="val" id="m_parcela"></div></div>
+        <div class="kpi"><div class="label">Limite (20% do salário)</div><div class="val" id="m_limiteParcela"></div></div>
+        <div class="kpi"><div class="label">Salário mínimo p/ essa compra</div><div class="val" id="m_salarioMin"></div></div>
+        <div class="kpi"><div class="label">Valor máximo do veículo (pela renda)</div><div class="val" id="m_veiculoMax"></div></div>
+      </div>
+      <p class="note">Cálculo do valor máximo considera a mesma taxa, prazo e percentual financiado desta simulação.</p>
+      <div class="btnrow">
+        <button class="btn secondary" id="m_close">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="grid">
+      <!-- LADO ESQUERDO: FORM -->
+      <section class="card">
+        <h2>Dados para Simulação</h2>
+        <fieldset>
+          <div class="full">
+            <label>Valor FIPE do veículo (R$)</label>
+            <input type="text" class="money" id="fipe" inputmode="numeric" placeholder="ex: 75.000,00" value="">
+          </div>
+
+          <div>
+            <label>Tempo como associado (meses)</label>
+            <input type="number" id="mesesCoop" min="0" step="1" placeholder="ex: 30">
+          </div>
+          
+          <div>
+            <label>Ano do veículo</label>
+            <input type="number" id="anoVeiculo" step="1" placeholder="ex: 2018">
+            <span class="note" id="anoHint"></span>
+          </div>
+
+          <div>
+            <label>Salário mensal (R$)</label>
+            <input type="text" class="money" id="salario" inputmode="numeric" placeholder="ex: 3.000,00" value="">
+          </div>
+
+          <div>
+            <label>Saldo de capital (R$)</label>
+            <input type="text" class="money" id="saldoCapital" inputmode="numeric" value="0,00">
+          </div>
+          <div>
+            <label>Saldo devedor de outros empréstimos (R$)</label>
+            <input type="text" class="money" id="dividas" inputmode="numeric" value="0,00">
+          </div>
+
+          <div>
+            <label>Percentual que deseja financiar (%) — máx. 80%</label>
+            <input type="number" id="pctDesejado" min="10" max="80" step="5" value="80">
+          </div>
+          <div>
+            <label>Prazo (meses)</label>
+            <select id="prazo">
+              <option>12</option><option>18</option><option selected>24</option>
+              <option>30</option><option>36</option><option>48</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Carência (meses) — até 24</label>
+            <input type="number" id="carencia" min="0" max="24" step="1" value="0">
+          </div>
+          <div>
+            <label>Juros durante a carência</label>
+            <select id="carenciaTipo">
+              <option value="capitaliza" selected>Capitalizar (aumenta o saldo)</option>
+              <option value="somenteJuros">Pagar somente juros mensalmente</option>
+              <option value="isenta">Sem cobrança na carência (simulação)</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label>Taxa de juros (a.m.)</label>
+            <div class="row">
+              <input type="number" id="taxa" min="1.5" max="3.5" step="0.01" style="max-width:220px" placeholder="ex: 1,70">
+              <button class="btn secondary" id="btnAutoTaxa" type="button">Auto pela Tabela</button>
+              <span class="note">Tabela Cooperata 1,50%–1,70% a.m. (mín. comercial: 1,70% a.m.)</span>
+            </div>
+          </div>
+
+          <div class="full row" style="margin-top:8px">
+            <button class="btn" id="simular" type="button">Simular</button>
+            <button class="btn secondary" id="csv" type="button" disabled>Baixar CSV</button>
+            <span class="pill"><b>Regra:</b> até <b>80%</b> da FIPE e no máximo <b>48</b> parcelas
+              <span class="badge">mín. 24 contribuições de capital</span>
+            </span>
+          </div>
+
+          <div class="full note">
+            <span class="warn">Atenção:</span> acima de 24 meses na cooperativa: até 80% da FIPE em até 48 parcelas,
+            limitado a <b>5 salários + saldo de capital</b>. Será abatido saldo devedor de outros empréstimos.
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- LADO DIREITO: RESULTADOS -->
+      <section class="card results" id="results" style="display:none">
+        <h2>Resultado da Simulação</h2>
+        <div id="incomeBanner" class="banner" style="display:none"></div>
+        <div id="alerts"></div>
+        <div class="kpis" style="margin-top:10px">
+          <div class="kpi"><div class="label">Valor financiado</div><div class="val" id="k_valorFin"></div></div>
+          <div class="kpi"><div class="label">Taxa (a.m.)</div><div class="val" id="k_taxa"></div></div>
+          <div class="kpi"><div class="label">Parcela (PRICE)</div><div class="val" id="k_parcela"></div></div>
+          <div class="kpi"><div class="label">Prazo</div><div class="val" id="k_prazo"></div></div>
+          <div class="kpi"><div class="label">Carência</div><div class="val" id="k_carencia"></div></div>
+          <div class="kpi"><div class="label">Renda mínima requerida</div><div class="val" id="k_rendaMin"></div></div>
+          <div class="kpi"><div class="label">CET aproximado*</div><div class="val" id="k_cet"></div></div>
+          <div class="kpi"><div class="label">Entrada requerida</div><div class="val" id="k_entrada"></div></div>
+          <div class="kpi"><div class="label">% da FIPE (entrada)</div><div class="val" id="k_entrada_pct"></div></div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="legend">*CET aproximado considera apenas juros. Custos operacionais/seguros não incluídos.</div>
+
+        <details open>
+          <summary style="cursor:pointer;margin-top:8px">Ver tabela de amortização</summary>
+          <div style="overflow:auto;max-height:420px">
+            <table id="tabela">
+              <thead>
+                <tr>
+                  <th>Mês</th><th>Fase</th><th>Saldo Inicial</th><th>Juros</th><th>Amortização</th><th>Parcela</th><th>Saldo Final</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+              <tfoot>
+                <tr><td>Total</td><td></td><td></td><td id="totJuros"></td><td id="totAmort"></td><td id="totParcelas"></td><td></td></tr>
+              </tfoot>
+            </table>
+          </div>
+        </details>
+      </section>
+    </div>
+
+    <!-- REGRAS E DOCUMENTOS -->
+    <section class="card" style="margin-top:16px">
+      <h2>Regras, Documentos e Obrigações</h2>
+      <ul class="doclist">
+        <li><b>Carência:</b> até 24 meses; mínimo 24 contribuições de capital.</li>
+        <li><b>Limite:</b> até 80% da FIPE e até 48 prestações; valor limitado a <b>5 salários + saldo de capital</b> (abatendo dívidas em andamento).</li>
+<li><b>Entrada mínima:</b> 20% do valor FIPE. Pode ser <u>maior</u> caso o teto de crédito (5 salários + capital – dívidas) seja inferior a 80% da FIPE.</li>
+        <li><b>Juros:</b> a partir de 1,70% a.m. (consulte política vigente). Tabela operacional 1,50%–1,70% a.m.</li>
+        <li><b>Método PRICE:</b> parcelas mensais fixas.</li>
+        <li><b>Garantia:</b> veículo alienado até o fim do contrato.</li>
+        <li><b>Necessário:</b> CRLV Digital; declaração de ciência de transferência (associado); autorização de alienação (concessionária/terceiro). Outros documentos podem ser solicitados.</li>
+        <li><b>Obrigatório:</b> emitir novo CRV em seu nome e enviar cópia à Cooperata em até 20 dias.</li>
+        <li><b>Seguro:</b> contratação obrigatória (cláusula 1.5). Enviar cópia da apólice em até 20 dias após o crédito.</li>
+        <li><b>Importante:</b> em meses de férias/afastamento, realizar transferência identificada para a conta da Cooperata.</li>
+        <li><b>Crédito:</b> sujeito à aprovação e análise interna.</li>
+      </ul>
+      <p class="note">Esta é uma ferramenta de simulação. Condições reais podem variar após análise.</p>
+    </section>
+  </div>
+
+<script>
+/* ===== Helpers de moeda BR (máscara + parse) ===== */
+function formatBRL(n){
+  const fixed = Number(n).toFixed(2);
+  let [int, dec] = fixed.split('.');
+  int = int.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  return int + ',' + dec;
+}
+function parseBRL(str){
+  if(!str) return 0;
+  const onlyDigits = String(str).replace(/[^\d]/g,'');
+  return (parseInt(onlyDigits||'0',10)/100);
+}
+function maskMoneyInput(e){
+  const el = e.target;
+  const digits = el.value.replace(/[^\d]/g,'');
+  const n = (parseInt(digits||'0',10)/100).toFixed(2);
+  const [i,d] = n.split('.');
+  el.value = i.replace(/\B(?=(\d{3})+(?!\d))/g,'.') + ',' + d;
+}
+
+['fipe','salario','saldoCapital','dividas'].forEach(id=>{
+  const inp = document.getElementById(id);
+  inp.addEventListener('input', maskMoneyInput);
+  // inicia com 0,00 se vazio
+  if(!inp.value) inp.value = '0,00';
+});
+
+/* --- Tabela de taxas (imagem) --- */
+
+// Configura range dinâmico do ano do veículo (até 10 anos de uso)
+(function(){
+  const y = new Date().getFullYear();
+  const minY = y - 10, maxY = y;
+  const anoInp = document.getElementById('anoVeiculo');
+  if(anoInp){ anoInp.min = String(minY); anoInp.max = String(maxY); }
+  const hint = document.getElementById('anoHint');
+  if(hint){ hint.textContent = 'Aceito: de ' + minY + ' até ' + maxY + ' (máx. 10 anos de uso)'; }
+})();
+
+const rateTable = {
+  10:{12:1.50,18:1.50,24:1.50,30:1.60,36:1.60,48:1.70},
+  20:{12:1.50,18:1.50,24:1.60,30:1.60,36:1.60,48:1.70},
+  30:{12:1.50,18:1.50,24:1.60,30:1.60,36:1.70,48:1.70},
+  40:{12:1.60,18:1.60,24:1.60,30:1.60,36:1.70,48:1.70},
+  50:{12:1.60,18:1.60,24:1.70,30:1.70,36:1.70,48:1.70},
+  60:{12:1.60,18:1.70,24:1.70,30:1.70,36:1.70,48:1.70},
+  70:{12:1.70,18:1.70,24:1.70,30:1.70,36:1.70,48:1.70},
+  80:{12:1.70,18:1.70,24:1.70,30:1.70,36:1.70,48:1.70}
+};
+
+function br(n){return (isNaN(n)?'R$ 0,00':(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}))}
+function fmtPct(n){return (n*100).toFixed(2).replace('.',',')+'%'}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+
+/* Sugerir taxa pela tabela considerando % financiado e prazo */
+function autoRate(percent, prazoMeses){
+  const p = Math.min(80, Math.max(10, Math.round(percent/10)*10)); // arredonda para bloco de 10
+  let r = (rateTable[p] && rateTable[p][prazoMeses]) ? rateTable[p][prazoMeses] : 1.70;
+  // política: mínimo comercial 1,70% a.m.
+  r = Math.max(1.70, r);
+  return r;
+}
+
+/* PRICE: PMT = P*i/(1-(1+i)^-n) */
+function pricePMT(principal, taxaMes, n){
+  const i = taxaMes;
+  if(i === 0) return principal / n;
+  return principal * (i) / (1 - Math.pow(1 + i, -n));
+}
+
+/* Gera amortização incluindo carência */
+function gerarTabela({principal, taxaMes, prazo, carencia, modoCarencia}){
+  let rows = [];
+  let saldo = principal;
+  let totalJ=0,totalA=0,totalP=0;
+
+  // Fase de carência
+  for(let m=1;m<=carencia;m++){
+    let jurosCalc = saldo * taxaMes;
+    let juros = 0, amort = 0, parcela = 0;
+
+    if(modoCarencia==='capitaliza'){
+      juros = jurosCalc;
+      saldo += juros;          // incorpora
+      totalJ += juros;         // contabiliza custo
+    }else if(modoCarencia==='somenteJuros'){
+      juros = jurosCalc;
+      parcela = juros;         // paga juros, saldo não muda
+      totalP += parcela;
+      totalJ += juros;
+    }else{ // isenta
+      juros = 0;               // sem cobrança de juros na carência
+    }
+    rows.push({mes:m,label:'Carência',si:saldo - (modoCarencia==='capitaliza'?juros:0),j:juros,a:amort,p:parcela,sf:saldo});
+  }
+
+  // Recalcula PMT sobre saldo após carência
+  const pmt = pricePMT(saldo, taxaMes, prazo);
+  for(let m=1;m<=prazo;m++){
+    const si = saldo;
+    const j = si * taxaMes;
+    const a = pmt - j;
+    saldo = Math.max(0, si - a);
+    totalJ += j; totalA += a; totalP += pmt;
+    rows.push({mes:carencia+m,label:'Amortização',si:si,j:j,a:a,p:pmt,sf:saldo});
+  }
+  return {rows, totals:{juros:totalJ, amort:totalA, parcelas:totalP}};
+}
+
+
+
+function toggleError(ids, on){
+  ids.forEach(function(sel){
+    var el = document.querySelector(sel);
+    if(!el) return;
+    if(on){ el.classList.add('error'); } else { el.classList.remove('error'); }
+  });
+}
+
+/* ===== Modal helpers ===== */
+function showCompat(data){
+  document.getElementById('m_parcela').textContent = br(data.parcela);
+  document.getElementById('m_limiteParcela').textContent = br(data.limiteParcela);
+  document.getElementById('m_salarioMin').textContent = br(data.salarioMin);
+  document.getElementById('m_veiculoMax').textContent = br(data.veiculoMax);
+  document.getElementById('compatBackdrop').style.display='flex';
+}
+function hideCompat(){ document.getElementById('compatBackdrop').style.display='none'; }
+document.addEventListener('click', (e)=>{
+  if(e.target && e.target.id==='m_close'){ hideCompat(); }
+  if(e.target && e.target.id==='compatBackdrop'){ hideCompat(); }
+});
+
+/* CSV */
+function tabelaToCSV(rows){
+  const head = ['Mes','Fase','Saldo Inicial','Juros','Amortização','Parcela','Saldo Final'];
+  const lines = [head.join(';')];
+  rows.forEach(r=>{
+    lines.push([
+      r.mes, r.label,
+      r.si.toFixed(2).replace('.',','),
+      r.j.toFixed(2).replace('.',','),
+      r.a.toFixed(2).replace('.',','),
+      r.p.toFixed(2).replace('.',','),
+      r.sf.toFixed(2).replace('.',','),
+    ].join(';'))
+  });
+  return lines.join('\\n');
+}
+
+/* DOM */
+const $ = (s)=>document.querySelector(s);
+const el = (tag,txt)=>{const e=document.createElement(tag); if(txt!==undefined)e.textContent=txt; return e;}
+
+const inputs = {
+  fipe: $('#fipe'), mesesCoop: $('#mesesCoop'), salario: $('#salario'),
+  saldoCapital: $('#saldoCapital'), dividas: $('#dividas'),
+  pctDesejado: $('#pctDesejado'), prazo: $('#prazo'),
+  carencia: $('#carencia'), carenciaTipo: $('#carenciaTipo'),
+  taxa: $('#taxa')
+};
+
+$('#btnAutoTaxa').addEventListener('click', ()=>{
+  const fipe = parseBRL(inputs.fipe.value||'0');
+  const pct = clamp(+inputs.pctDesejado.value||0,10,80);
+  const prazo = +inputs.prazo.value;
+  const taxa = autoRate(fipe>0?pct:80, prazo);
+  inputs.taxa.value = taxa.toFixed(2);
+});
+
+$('#simular').addEventListener('click', ()=>{
+  try{
+    const msgs = [];
+    const fipe = parseBRL(inputs.fipe.value||'0');
+    const mesesCoop = +inputs.mesesCoop.value||0;
+    const salario = parseBRL(inputs.salario.value||'0');
+    const saldoCapital = parseBRL(inputs.saldoCapital.value||'0');
+    const dividas = parseBRL(inputs.dividas.value||'0');
+    let pct = clamp(+inputs.pctDesejado.value||0,10,80);
+    const prazo = +inputs.prazo.value||24;
+    const carencia = clamp(+inputs.carencia.value||0,0,24);
+    const tipoCar = inputs.carenciaTipo.value||'capitaliza';
+
+    if(!(typeof fipe==='number') || isNaN(fipe)) throw new Error('Valor FIPE inválido.');
+  
+  
+  const anoVeiculo = +document.getElementById('anoVeiculo').value||0;
+  const anoAtual = new Date().getFullYear();
+  const idade = anoAtual - anoVeiculo;
+  let anoOk = true;
+  if(!anoVeiculo || String(anoVeiculo).length!==4 || isNaN(anoVeiculo)){
+    msgs.push('Informe um ano válido no formato AAAA.');
+    anoOk = false;
+  }else if(idade<0){
+    msgs.push('Ano do veículo não pode ser no futuro.');
+    anoOk = false;
+  }else if(idade>10){
+    msgs.push('Veículos com mais de 10 anos de uso não são elegíveis.');
+    anoOk = false;
+  }
+  if(!anoOk){
+    const banner = document.getElementById('incomeBanner');
+    banner.style.display='block';
+    banner.innerHTML = '<b>Ano do veículo incoerente.</b> Informe um ano entre ' + (anoAtual-10) + ' e ' + anoAtual + ' (máx. 10 anos).';
+    document.querySelector('#results').style.display='block';
+    document.getElementById('csv').disabled = true;
+    return; // bloqueia simulação
+  }
+  if(fipe<=0) msgs.push('Informe o valor FIPE do veículo.');
+
+    if(mesesCoop<24) msgs.push('Regra: mínimo 24 meses como associado para condições máximas (80% em até 48 parcelas).');
+    const tetoPolitica = Math.max(0, (salario*5 + saldoCapital) - dividas);
+    if(tetoPolitica<=0) msgs.push('O teto “5 salários + saldo de capital - dívidas” está zerado/negativo.');
+
+    // Valor máximo por regra
+    const maxPorcentagem = 0.80 * fipe;
+    const maxLimite = tetoPolitica;
+    const maxFinanciavel = Math.max(0, Math.min(maxPorcentagem, maxLimite));
+
+    // Valor desejado por percentual
+    let desejado = (pct/100)*fipe;
+    if(desejado>maxFinanciavel){
+      desejado = maxFinanciavel;
+      // recalcula % efetivo
+      pct = fipe>0 ? Math.round((desejado/fipe)*100) : pct;
+      msgs.push('Valor solicitado ajustado ao limite (80% FIPE e/ou 5 salários + saldo de capital, abatendo dívidas).');
+    }
+
+  
+  // Entrada requerida (FIPE - valor financiado)
+  const entrada = Math.max(0, fipe - desejado);
+  const entradaPct = fipe>0 ? (entrada / fipe) : 0;
+
+  // KPIs de entrada
+  document.querySelector('#k_entrada').textContent = br(entrada);
+  document.querySelector('#k_entrada_pct').textContent = (entradaPct*100).toFixed(2).replace('.',',') + '%';
+
+  // Observação explicativa
+  const entradaMin = 0.20 * fipe;
+  if(entrada < entradaMin){
+    msgs.push('Entrada mínima considerada é 20% da FIPE. Ajuste solicitado pode elevar a entrada se o teto de crédito for menor.');
+  }
+
+  // Taxa
+    let taxaMes = parseFloat(String(inputs.taxa.value||'').replace(',', '.'));
+    if(!taxaMes || taxaMes<1.50 || taxaMes>4.0){
+      taxaMes = autoRate(pct, prazo);
+      inputs.taxa.value = taxaMes.toFixed(2);
+    }
+    // mínimo comercial 1,70% a.m.
+    taxaMes = Math.max(taxaMes, 1.70);
+    const i = taxaMes/100;
+
+    // Gera tabela
+    const sim = gerarTabela({
+      principal: desejado,
+      taxaMes: i,
+      prazo,
+      carencia,
+      modoCarencia: tipoCar
+    });
+    const rows = sim.rows, totals = sim.totals;
+
+    // KPIs
+    document.querySelector('#k_valorFin').textContent = br(desejado);
+    document.querySelector('#k_taxa').textContent = (taxaMes.toFixed(2).replace('.',',')) + '% a.m.';
+    // parcela exibida: pega a primeira parcela pós-carência (PRICE) sem optional chaining
+    var firstPrice = 0;
+    for(var idx=0; idx<rows.length; idx++){ if(rows[idx].label==='Amortização'){ firstPrice = rows[idx].p; break; } }
+    document.querySelector('#k_parcela').textContent = br(firstPrice||0);
+    document.querySelector('#k_prazo').textContent = prazo + ' meses';
+    document.querySelector('#k_carencia').textContent = carencia + ' meses';
+    // Renda mínima requerida (parcela/0.20)
+  const rendaMin = firstPrice/0.20;
+  document.querySelector('#k_rendaMin').textContent = br(rendaMin);
+  
+  // Verifica compatibilidade e aplica alerta visual
+  const rendaMinEl = document.querySelector('#k_rendaMin');
+  const parcelaEl = document.querySelector('#k_parcela');
+  if(rendaMin > salario){
+    rendaMinEl.classList.add('alert');
+    parcelaEl.classList.add('alert');
+    document.querySelector('#results').classList.add('alert');
+    msgs.push('Incompatibilidade: sua renda atual é insuficiente para essa simulação. Valores exibidos são apenas ilustrativos.');
+  } else {
+    rendaMinEl.classList.remove('alert');
+    parcelaEl.classList.remove('alert');
+    document.querySelector('#results').classList.remove('alert');
+  }
+
+  // CET aproximado = (1+i)^12 - 1
+    const cet = Math.pow(1+i,12)-1;
+    
+  
+  document.querySelector('#k_cet').textContent = fmtPct(cet);
+
+  // ===== Compatibilidade de renda: pintar em vermelho e exibir banner quando não compatível =====
+  const limiteParcela = salario * 0.20;
+  const incomeOK = firstPrice <= limiteParcela;
+  const banner = document.getElementById('incomeBanner');
+  if(!incomeOK){
+    banner.style.display='block';
+    banner.innerHTML = '<b>Renda não compatível.</b> Estes valores são apenas um <b>exemplo</b> de como ficaria se sua renda fosse adequada. Limite de parcela: ' + br(limiteParcela) + ' — renda mínima para esta compra: ' + br(firstPrice/0.20) + '.';
+    toggleError(['#k_parcela','#k_rendaMin','#k_valorFin','#k_entrada','#k_entrada_pct'], true);
+  }else{
+    banner.style.display='none';
+    banner.textContent='';
+    toggleError(['#k_parcela','#k_rendaMin','#k_valorFin','#k_entrada','#k_entrada_pct'], false);
+  }
+
+
+
+    // Tabela
+    const tbody = document.querySelector('#tabela tbody');
+    tbody.innerHTML = '';
+    rows.forEach(function(r){
+      const tr = el('tr');
+      tr.appendChild(el('td', r.mes));
+      tr.appendChild(el('td', r.si === r.sf && r.p===0 ? 'Carência' : r.label));
+      tr.appendChild(el('td', br(r.si)));
+      tr.appendChild(el('td', br(r.j)));
+      tr.appendChild(el('td', br(r.a)));
+      tr.appendChild(el('td', br(r.p)));
+      tr.appendChild(el('td', br(r.sf)));
+      tbody.appendChild(tr);
+    });
+    document.querySelector('#totJuros').textContent = br(totals.juros);
+    document.querySelector('#totAmort').textContent = br(totals.amort);
+    document.querySelector('#totParcelas').textContent = br(totals.parcelas);
+
+    // Alertas
+    const alerts = document.querySelector('#alerts');
+    alerts.innerHTML = '';
+    if(msgs.length){
+      const ul = el('ul'); ul.style.margin="0 0 10px";
+      msgs.forEach(function(m){ const li = el('li'); li.innerHTML = '<span class="warn">•</span> '+m; ul.appendChild(li); });
+      alerts.appendChild(ul);
+    }
+    document.querySelector('#results').style.display='block';
+    document.querySelector('#csv').disabled = false; // habilita apenas quando válido
+
+    // CSV handler
+    document.querySelector('#csv').onclick = function(){
+      const csv = tabelaToCSV(rows);
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'amortizacao_cooperata.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    };
+  }catch(err){
+    const alerts = document.querySelector('#alerts');
+    alerts.innerHTML = '<div class="danger">Erro na simulação: '+ (err && err.message ? err.message : String(err)) +'</div>';
+    document.querySelector('#results').style.display='block';
+  }
+});
+
+document.getElementById('csv').addEventListener('click', ()=>{
+  if(window._lastRows){
+    const csv = tabelaToCSV(window._lastRows);
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'amortizacao_cooperata.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+});
+</script>
+</body>
+</html>
