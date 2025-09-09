@@ -1,14 +1,24 @@
 {
-  "name": "Cooperata Calc",
+  "id": "cooperata-simuladores",
+  "name": "Linhas de Crédito Cooperata",
   "short_name": "Cooperata",
-  "start_url": ".",
-  "scope": ".",
+  "start_url": "./linhas-de-credito-unificado.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0b1720",
-  "theme_color": "#0b1720",
+  "theme_color": "#3bd17f",
   "icons": [
-    { "src": "iconsicon-192.png", "sizes": "192x192", "type": "imagepng" },
-    { "src": "iconsicon-512.png", "sizes": "512x512", "type": "imagepng" },
-    { "src": "iconsapple-touch-icon.png", "sizes": "180x180", "type": "imagepng", "purpose": "any maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
