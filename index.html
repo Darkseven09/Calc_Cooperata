@@ -63,33 +63,34 @@
   </style>
 
   <!-- ============================
-       Grade do menu — padronização de cards
+       Linhas de Crédito — Grid e Cards
+       Nota: largura/altura dos cards são
+       controladas por .credit-card dentro de #linhas-credito.
        ============================ -->
   <style>
-    /* Mesma altura e largura por linha; cards preenchem a célula */
-    .menu-grid { align-items: stretch; justify-items: stretch; }
-    .menu-grid > * { height: 100%; }
-    .menu-grid .card { display: flex; align-items: center; gap: 16px; height: 100%; min-height: 72px; }
+    /* Wrapper: grid 2 col (≥768px) e 1 col (<768px); gap consistente */
+    #linhas-credito { display: grid; gap: 24px; align-items: stretch; justify-items: stretch; }
+    @media (max-width: 767px) { #linhas-credito { grid-template-columns: 1fr; } }
+    @media (min-width: 768px) { #linhas-credito { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-    /* Ícone com dimensões fixas e centrado (evita puxar o layout) */
-    .menu-grid .icobg { width: 56px; height: 56px; flex: 0 0 56px; display:flex; align-items:center; justify-content:center; }
-    .menu-grid .ico { font-size: 30px; line-height: 1; }
+    /* Anti-vazamento: filhos e cards ocupam 100% sem max-width conflitante */
+    #linhas-credito > * { width: 100%; box-sizing: border-box; }
+    #linhas-credito .credit-card { width: 100%; max-width: none; box-sizing: border-box; }
 
-    /* Bloco de texto elástico */
-    .menu-grid .title, .menu-grid .desc { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .menu-grid .title { font-weight: 800; }
+    /* Altura uniforme e layout interno */
+    #linhas-credito .credit-card { display: flex; align-items: center; gap: 16px; min-height: 120px; }
 
-    /* Ajuste de breakpoint: 2 colunas a partir de 768px, 1 coluna abaixo */
-    @media (max-width: 767px) {
-      .menu-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 12px; }
-    }
-    @media (min-width: 768px) {
-      .menu-grid { grid-template-columns: repeat(2, minmax(320px, 1fr)); gap: 24px; padding: 0 16px; }
-    }
+    /* Ícone fixo para não alterar a altura */
+    #linhas-credito .icobg { width: 56px; height: 56px; flex: 0 0 56px; display:flex; align-items:center; justify-content:center; }
+    #linhas-credito .ico { font-size: 30px; line-height: 1; }
+
+    /* Texto resiliente (ellipsis) */
+    #linhas-credito .title, #linhas-credito .desc { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    #linhas-credito .title { font-weight: 800; }
 
     /* Foco acessível (sem alterar paleta) */
-    .menu-grid .card:focus-visible,
-    .menu-grid .card:focus-within { outline: 2px solid #3bd17f; outline-offset: 2px; }
+    #linhas-credito .credit-card:focus-visible,
+    #linhas-credito .credit-card:focus-within { outline: 2px solid #3bd17f; outline-offset: 2px; }
   </style>
 
   <!-- Fix de vh: usa innerHeight real em qualquer modo -->
@@ -519,11 +520,11 @@
   <header><h1>Linhas de Crédito Cooperata.</h1><p class="sub">Escolha a linha para abrir o simulador correspondente.</p></header>
 
   <div class="wrap" id="cards">
-    <div class="grid menu-grid">
-      <div class="card" data-open="pessoal"><span class="icobg"><span class="ico">🛩️</span></span><div><div class="title">Linha de Crédito — <b>Pessoal</b></div><div class="desc">1,99% a.m. • até 24x • PRICE.</div></div></div>
-      <div class="card" data-open="refi"><span class="icobg"><span class="ico">💱</span></span><div><div class="title">Linha de Crédito — <b>Refinanciamento</b></div><div class="desc">2,99% a.m. • até 24x • PRICE.</div></div></div>
-      <div class="card" data-open="construcao"><span class="icobg"><span class="ico">🛠️</span></span><div><div class="title">Linha de Crédito — <b>Construção</b></div><div class="desc">1,99% a.m. • até 24x • PRICE.</div></div></div>
-      <div class="card" data-open="carro"><span class="icobg"><span class="ico">🚗</span></span><div><div class="title">Linha de Crédito — <b>Carro</b></div><div class="desc">1,70% a.m. • até 48x • PRICE.</div></div></div>
+    <div class="grid" id="linhas-credito">
+      <div class="card credit-card" data-open="pessoal"><span class="icobg"><span class="ico">🛩️</span></span><div class="text"><div class="title">Linha de Crédito — <b>Pessoal</b></div><div class="desc">1,99% a.m. • até 24x • PRICE.</div></div></div>
+      <div class="card credit-card" data-open="refi"><span class="icobg"><span class="ico">💱</span></span><div class="text"><div class="title">Linha de Crédito — <b>Refinanciamento</b></div><div class="desc">2,99% a.m. • até 24x • PRICE.</div></div></div>
+      <div class="card credit-card" data-open="construcao"><span class="icobg"><span class="ico">🛠️</span></span><div class="text"><div class="title">Linha de Crédito — <b>Construção</b></div><div class="desc">1,99% a.m. • até 24x • PRICE.</div></div></div>
+      <div class="card credit-card" data-open="carro"><span class="icobg"><span class="ico">🚗</span></span><div class="text"><div class="title">Linha de Crédito — <b>Carro</b></div><div class="desc">1,70% a.m. • até 48x • PRICE.</div></div></div>
     </div>
   </div>
 
