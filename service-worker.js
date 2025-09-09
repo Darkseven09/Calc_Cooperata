@@ -1,6 +1,6 @@
 const CACHE = 'coop-sim-v1';
 const ASSETS = [
-  './linhas-de-credito-unificado.html',
+  './index.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',

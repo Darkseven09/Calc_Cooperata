@@ -2,12 +2,13 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
+<base href=".">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Linhas de Crédito Cooperata.</title>
 
 <link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#3bd17f">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cooperata">
@@ -65,7 +66,8 @@
     document.querySelectorAll('[data-open]').forEach(c=>c.addEventListener('click',()=>openSim(c.dataset.open)));
     document.getElementById('voltar').addEventListener('click', back);
     window.addEventListener('message', ev=>{ const d=ev.data||{}; if(d.kind==='resize') frame.style.height=Math.max(700,d.h||0)+'px'; });
-    if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{})); }
+    
   </script>
-</body>
-</html>
+  <script defer src="./sw-reg.js"></script>
+  </body>
+  </html>
