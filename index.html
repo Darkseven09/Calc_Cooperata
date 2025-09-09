@@ -240,6 +240,81 @@
     }
   </style>
 
+  <!-- =====================================================
+       Unificação de layout — aplica o estilo Veículos às
+       páginas Pessoal, Refinanciamento e Construção
+       (sem alterar desktop e sem mexer em JS/HTML)
+       ===================================================== -->
+  <style>
+    /* Centraliza e limita a largura de todo o conteúdo */
+    .wrap,
+    main,
+    section.card.results {
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    /* Visual de card consistente com o de Veículos */
+    .card {
+      background: var(--card);
+      border: 1px solid #173244;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    /* Formulário em duas colunas, como no Veículos */
+    fieldset {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    fieldset .full { grid-column: 1 / -1; }
+
+    /* Inputs/selects ocupam 100% da coluna */
+    input, select { width: 100%; }
+
+    /* KPIs e linhas auxiliares consistentes */
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+    /* Resultados — tabela: não amassar colunas no mobile */
+    .results details > div,
+    .results .table-wrap,
+    .results [style*="overflow:auto"] {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .results table { min-width: 720px; }
+
+    /* ====== Responsivo — igual ao Veículos ====== */
+    @media (max-width: 960px) {
+      /* Grids viram 1 coluna */
+      .grid { grid-template-columns: 1fr !important; gap: 14px; }
+      fieldset { grid-template-columns: 1fr; gap: 12px; }
+
+      /* KPIs em 2 colunas */
+      .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+      /* Cards mais compactos */
+      .card { padding: 16px; border-radius: 14px; }
+
+      /* Botões podem ocupar linha toda quando necessário */
+      .row .btn { flex: 1 1 160px; }
+    }
+
+    @media (max-width: 520px) {
+      /* KPIs em 1 coluna nos aparelhos menores */
+      .kpis { grid-template-columns: 1fr; }
+
+      /* Botões realmente de ponta a ponta quando falta espaço */
+      .row .btn { width: 100%; }
+    }
+  </style>
+
   <script>
     (function () {
       // ===== Utilidades =====
