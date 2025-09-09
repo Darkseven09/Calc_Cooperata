@@ -1,4 +1,4 @@
-const CACHE = 'coop-sim-v1';
+const CACHE = 'coop-sim-v2';
 const ASSETS = [
   './index.html',
   './manifest.webmanifest',
