@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <base href=".">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <title>Linhas de Crédito Cooperata.</title>
 
 <link rel="manifest" href="./manifest.webmanifest">
@@ -14,8 +14,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cooperata Calc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Cooperata">
 
 <!-- Evita auto-link de telefones no iOS -->
+<meta name="format-detection" content="telephone=no">
+
+<!-- Meta tags adicionais para PWA -->
+<meta name="msapplication-TileColor" content="#0b1720">
+<meta name="msapplication-config" content="./browserconfig.xml">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Cooperata">
+<meta name="description" content="Simuladores de crédito Cooperata - Calcule suas parcelas e condições de empréstimo">
+
+<!-- Prevenção de zoom indesejado -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 
 <style>
@@ -47,7 +60,11 @@
       --safe-left: env(safe-area-inset-left, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
     }
-    html, body { height: 100%; background: #0b1720; }
+    html, body { 
+      height: 100%; 
+      background: #0b1720; 
+      overflow-x: hidden; /* Previne scroll horizontal */
+    }
     /* Usa a altura real da tela no PWA */
     body{
       min-height: var(--app-viewport-h);
@@ -59,6 +76,33 @@
       overscroll-behavior: contain;
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      /* Previne bounce no iOS */
+      -webkit-overflow-scrolling: touch;
+      position: relative;
+    }
+    
+    /* Permite seleção de texto em inputs e elementos específicos */
+    input, textarea, select, [contenteditable] {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+    
+    /* Melhora a experiência de toque */
+    button, .card, .btn {
+      -webkit-tap-highlight-color: rgba(59, 209, 127, 0.2);
+      touch-action: manipulation;
+    }
+    
+    /* Previne zoom em inputs no iOS */
+    input, select, textarea {
+      font-size: 16px !important;
+      transform: translateZ(0);
     }
   </style>
 
@@ -140,6 +184,7 @@
       .card { 
         padding: 16px !important; 
         border-radius: 14px !important; 
+        margin: 0 8px; /* Margem lateral para não colar nas bordas */
       }
 
       /* KPIs em 2 colunas no mobile grande */
@@ -157,6 +202,7 @@
       /* Botões principais podem ocupar a linha toda se faltar espaço */
       .row .btn { 
         flex: 1 1 160px; 
+        min-height: 44px; /* Tamanho mínimo para toque */
       }
 
       /* tabela rolável no mobile */
@@ -174,8 +220,25 @@
 
       /* Padding lateral confortável no container */
       .wrap { 
-        padding-left: 16px; 
-        padding-right: 16px; 
+        padding-left: 12px; 
+        padding-right: 12px; 
+      }
+      
+      /* Header mais compacto no mobile */
+      header {
+        padding: 20px 12px 0;
+      }
+      
+      /* Footer mais compacto */
+      footer {
+        padding: 0 12px;
+        margin-bottom: 20px;
+      }
+      
+      /* About section mais compacta */
+      .about {
+        margin: 8px 12px 20px;
+        padding: 12px;
       }
     }
 
@@ -188,6 +251,36 @@
       /* Botões em linha cheia */
       .row .btn { 
         width: 100%; 
+        min-height: 48px; /* Ainda maior para telas pequenas */
+      }
+      
+      /* Cards ainda mais compactos */
+      .card {
+        margin: 0 4px;
+        padding: 12px !important;
+      }
+      
+      /* Header ainda mais compacto */
+      header {
+        padding: 16px 8px 0;
+      }
+      
+      /* Wrap com menos padding */
+      .wrap {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      
+      /* About section ainda mais compacta */
+      .about {
+        margin: 8px 8px 16px;
+        padding: 10px;
+      }
+      
+      /* Footer com menos espaço */
+      footer {
+        padding: 0 8px;
+        margin-bottom: 16px;
       }
     }
   </style>

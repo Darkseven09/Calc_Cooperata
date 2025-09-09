@@ -10,7 +10,7 @@
   }
 
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('.service-worker.js', { scope: '.' })
+    navigator.serviceWorker.register('./service-worker.js', { scope: '.' })
       .then(reg => console.log('[SW] OK:', reg.scope))
       .catch(err => console.warn('[SW] erro:', err));
   });

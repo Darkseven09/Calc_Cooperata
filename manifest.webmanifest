@@ -1,14 +1,21 @@
 {
   "id": "cooperata-simuladores",
-  "name": "Cooperata  Simuladores",
+  "name": "Cooperata Simuladores",
   "short_name": "Cooperata",
   "start_url": "./?source=pwa",
   "scope": ".",
   "display": "fullscreen",
-  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
-  "orientation": "portrait",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "any",
   "theme_color": "#0b1720",
   "background_color": "#0b1720",
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "./icons/icon-192.png",
